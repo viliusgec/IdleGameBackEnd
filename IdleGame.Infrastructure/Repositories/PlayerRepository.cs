@@ -31,8 +31,22 @@ namespace IdleGame.Infrastructure.Repositories
         }
         public async Task<PlayerEntity> GetPlayer(string username)
         {
-            var player = await _context.Players.FindAsync(username);
+            var player = await _context.Players.AsNoTracking().FirstOrDefaultAsync(x => x.Username == username);
             return _mappingService.Map<PlayerEntity>(player);
+        }
+
+        public PlayerEntity UpdatePlayer(PlayerEntity player)
+        {
+            _context.Entry(_mappingService.Map<PlayerModel>(player)).State = EntityState.Modified;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return player;
         }
     }
 }

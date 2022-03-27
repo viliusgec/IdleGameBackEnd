@@ -16,9 +16,15 @@ namespace IdleGame.Domain.Services
             var player = new PlayerEntity { InventorySpace = 0, IsInAction = false, IsInBattle = false, Money = 0, Username = username };
             return _playerRepository.PostPlayer(player);
         }
+
         public Task<PlayerEntity> GetPlayer(string username)
         {
             return _playerRepository.GetPlayer(username);
+        }
+
+        PlayerEntity IPlayerRetrievalService.UpdatePlayer(PlayerEntity player)
+        {
+            return _playerRepository.UpdatePlayer(player);
         }
     }
 }

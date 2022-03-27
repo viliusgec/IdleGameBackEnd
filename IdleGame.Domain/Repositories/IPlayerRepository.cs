@@ -6,5 +6,6 @@ namespace IdleGame.Domain.Repositories
     {
         public Task<PlayerEntity> PostPlayer(PlayerEntity user);
         public Task<PlayerEntity> GetPlayer(string username);
+        PlayerEntity UpdatePlayer(PlayerEntity player);
     }
 }

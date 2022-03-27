@@ -36,5 +36,15 @@ namespace IdleGame.Api.Host.Controllers
             var result = await _itemService.GetPlayerItems(username);
             return Ok(_mappingService.Map<IEnumerable<PlayerItemDto>>(result));
         }
+
+        [HttpPost]
+        [Route("SellPlayerItems")]
+        [Authorize]
+        public async Task<ActionResult<PlayerItemDto>> SellPlayerItems(PlayerItemDto playerItem, int sellAmmount)
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _itemService.SellPlayerItems(username, playerItem, sellAmmount);
+            return Ok(_mappingService.Map<PlayerItemDto>(result));
+        }
     }
 }

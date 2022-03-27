@@ -23,7 +23,7 @@ namespace IdleGame.Infrastructure.Repositories
         }
         public async Task<IEnumerable<PlayerItemEntity>> GetPlayerItems(string username)
         {
-            return await _context.PlayerItems.Where(x => x.PlayerUsername == username)
+            return await _context.PlayerItems.AsNoTracking().Where(x => x.PlayerUsername == username)
                 .Join(_context.Items,
                     userItems => userItems.ItemName,
                     item => item.Name,
@@ -46,7 +46,7 @@ namespace IdleGame.Infrastructure.Repositories
 
         public async Task<PlayerItemEntity> GetPlayerItem(string username, string itemName)
         {
-            return await _context.PlayerItems.Where(x => x.PlayerUsername == username && x.ItemName == itemName)
+            return await _context.PlayerItems.AsNoTracking().Where(x => x.PlayerUsername == username && x.ItemName == itemName)
                 .Join(_context.Items,
                     userItems => userItems.ItemName,
                     item => item.Name,
@@ -61,7 +61,8 @@ namespace IdleGame.Infrastructure.Repositories
                             Name = userItem.ItemName,
                             Level = item.Level,
                             Description = item.Description,
-                            Price = item.Price
+                            Price = item.Price,
+                            isSellable = item.isSellable
                         }
                     }
                 ).FirstOrDefaultAsync();
