@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using IdleGame.Api.Host.Capabilities;
 using IdleGame.Infrastructure.DatabaseContext;
+using IdleGame.Api.Host.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = new ConfigurationBuilder()
@@ -17,6 +18,7 @@ var Configuration = new ConfigurationBuilder()
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
+builder.Services.AddSignalR();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "IdleGame", Version = "v1" });
@@ -79,20 +81,19 @@ var app = builder.Build();
 app.UseCors(options =>
  options.WithOrigins("http://localhost:3000")
 .AllowAnyMethod()
+.AllowCredentials()
 .AllowAnyHeader());
 
 app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IdleGame v1"));
-
+app.MapHub<ChatHub>("/hub");
 app.UseRouting();
 //app.UseHttpsRedirection();
 
-app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
