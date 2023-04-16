@@ -1,5 +1,6 @@
 ﻿using IdleGame.Domain.Entities;
 using IdleGame.Domain.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace IdleGame.ApplicationServices.Services
 {
@@ -30,6 +31,22 @@ namespace IdleGame.ApplicationServices.Services
             var userSkill = await _skillService.GetUserSkill(trainingSkill.SkillType, username);
             if (userSkill.Experience < trainingSkill.SkillLevelRequired * 10)
                 return null;
+            // add needed item validation
+                
+            if (!trainingSkill.NeededItem.IsNullOrEmpty())
+            {
+                var neededPlayerItem = await _itemRetrievalService.GetPlayerItem(username, trainingSkill.NeededItem);
+                if(neededPlayerItem == null)
+                {
+                    return null;
+                }
+                if(neededPlayerItem.Ammount < trainingSkill.NeededItemAmount)
+                {
+                    return null;
+                }
+                neededPlayerItem.Ammount -= trainingSkill.NeededItemAmount ?? 1;
+                _itemRetrievalService.PutPlayerItem(neededPlayerItem);
+            }
             var playerItem = await _itemRetrievalService.GetPlayerItem(username, trainingSkill.GivenItem);
             if(playerItem == null)
             {

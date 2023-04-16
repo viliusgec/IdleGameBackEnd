@@ -18,9 +18,19 @@ namespace IdleGame.Infrastructure.Repositories
 
         public async Task<IEnumerable<ItemEntity>> GetItems()
         {
-            var items = await _context.Items.ToListAsync();
+            var items = await _context.Items.AsNoTracking().ToListAsync();
             return _mappingService.Map<IEnumerable<ItemEntity>>(items);
         }
+
+        public async Task<IEnumerable<ItemEntity>> GetShopItems()
+        {
+            var items = await _context.ShopItems.AsNoTracking().Join(_context.Items,
+                shopItems => shopItems.ItemName,
+                item => item.Name,
+                (userItem, item) => item).ToListAsync();
+            return _mappingService.Map<IEnumerable<ItemEntity>>(items);
+        }
+
         public async Task<IEnumerable<PlayerItemEntity>> GetPlayerItems(string username)
         {
             return await _context.PlayerItems.AsNoTracking().Where(x => x.PlayerUsername == username)
@@ -94,6 +104,60 @@ namespace IdleGame.Infrastructure.Repositories
                 throw;
             }
             return playerItem;
+        }
+
+        public async Task<IEnumerable<MarketItemEntity>> GetMarketItems()
+        {
+            var items = await _context.MarketItems.AsNoTracking().ToListAsync();
+            return _mappingService.Map<IEnumerable<MarketItemEntity>>(items);
+        }
+
+        public async Task<IEnumerable<MarketItemEntity>> GetPlayerMarketItems(string username)
+        {
+            var items = await _context.MarketItems.AsNoTracking().Where(x => x.Player.Equals(username)).ToListAsync();
+            return _mappingService.Map<IEnumerable<MarketItemEntity>>(items);
+        }
+
+        public async Task<MarketItemEntity> PostMarketItem(MarketItemEntity item)
+        {
+            await _context.MarketItems.AddAsync(_mappingService.Map<MarketItemModel>(item));
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+            return item;
+        }
+
+        public MarketItemEntity PutMarketItem(MarketItemEntity item)
+        {
+            _context.Entry(_mappingService.Map<MarketItemModel>(item)).State = EntityState.Modified;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return item;
+        }
+
+        public MarketItemEntity DeleteMarketItem(MarketItemEntity item)
+        {
+            _context.Entry(_mappingService.Map<MarketItemModel>(item)).State = EntityState.Deleted;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return item;
         }
     }
 }

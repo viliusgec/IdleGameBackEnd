@@ -19,6 +19,12 @@ namespace IdleGame.Infrastructure.Mapping
             CreateMap<TrainingSkillModel, TrainingSkillEntity>().ReverseMap();
             CreateMap<ItemEntity, ItemDto>().ReverseMap();
             CreateMap<ItemModel, ItemEntity>().ReverseMap();
+            CreateMap<MonsterEntity, MonsterDto>().ReverseMap();
+            CreateMap<MonsterModel, MonsterEntity>().ReverseMap();
+            CreateMap<BattleEntity, BattleDto>().ReverseMap();
+            CreateMap<BattleModel, BattleEntity>().ReverseMap();
+            CreateMap<MarketItemEntity, MarketItemDto>().ReverseMap();
+            CreateMap<MarketItemModel, MarketItemEntity>().ReverseMap();
             CreateMap<PlayerItemEntity, PlayerItemDto>()
                 .ForMember(destination => destination.ItemName, opts => opts.MapFrom(source => source.Item.Name))
                 .ForMember(destination => destination.Level, opts => opts.MapFrom(source => source.Item.Level))

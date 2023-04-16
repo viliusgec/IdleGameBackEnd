@@ -15,6 +15,11 @@ namespace IdleGame.Domain.Services
             return _itemRepository.GetItems();
         }
 
+        public Task<IEnumerable<ItemEntity>> GetShopItems()
+        {
+            return _itemRepository.GetShopItems();
+        }
+
         public Task<IEnumerable<PlayerItemEntity>> GetPlayerItems(string username)
         {
             return _itemRepository.GetPlayerItems(username);
@@ -33,6 +38,31 @@ namespace IdleGame.Domain.Services
         public PlayerItemEntity PutPlayerItem(PlayerItemEntity playerItem)
         {
             return _itemRepository.PutPlayerItem(playerItem);
+        }
+
+        public Task<IEnumerable<MarketItemEntity>> GetMarketItems()
+        {
+            return _itemRepository.GetMarketItems();
+        }
+
+        public Task<IEnumerable<MarketItemEntity>> GetPlayerMarketItems(string username)
+        {
+            return _itemRepository.GetPlayerMarketItems(username);
+        }
+
+        public Task<MarketItemEntity> PostMarketItem(MarketItemEntity item)
+        {
+            return _itemRepository.PostMarketItem(item);
+        }
+
+        public MarketItemEntity PutMarketItem(MarketItemEntity item)
+        {
+            return _itemRepository.PutMarketItem(item);
+        }
+
+        public MarketItemEntity DeleteMarketItem(MarketItemEntity item)
+        {
+            return _itemRepository.DeleteMarketItem(item);
         }
     }
 }

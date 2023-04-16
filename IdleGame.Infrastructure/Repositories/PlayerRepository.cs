@@ -31,7 +31,7 @@ namespace IdleGame.Infrastructure.Repositories
         }
         public async Task<PlayerEntity> GetPlayer(string username)
         {
-            var player = await _context.Players.AsNoTracking().FirstOrDefaultAsync(x => x.Username == username);
+            var player = await _context.Players.AsNoTrackingWithIdentityResolution().FirstOrDefaultAsync(x => x.Username == username);
             return _mappingService.Map<PlayerEntity>(player);
         }
 

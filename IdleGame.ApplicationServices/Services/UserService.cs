@@ -37,7 +37,7 @@ namespace IdleGame.ApplicationServices.Services
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("Username",user.Username.ToString()),
-                        new Claim("Role", ans.Role)
+                        new Claim("Role", ans.Role),
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("1234567753123456")), SecurityAlgorithms.HmacSha256Signature)
