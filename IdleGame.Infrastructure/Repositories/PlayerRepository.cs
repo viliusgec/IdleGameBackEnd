@@ -37,12 +37,17 @@ namespace IdleGame.Infrastructure.Repositories
 
         public PlayerEntity UpdatePlayer(PlayerEntity player)
         {
-            _context.Entry(_mappingService.Map<PlayerModel>(player)).State = EntityState.Modified;
             try
             {
+                _context.Entry(_mappingService.Map<PlayerModel>(player)).State = EntityState.Modified;
+                var a = "test";
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            catch
             {
                 throw;
             }

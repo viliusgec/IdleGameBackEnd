@@ -104,7 +104,8 @@ namespace IdleGame.ApplicationServices.Services
                 return null;
             if (player.Money < marketItem.Price * item.Ammount || marketItem.Ammount < item.Ammount || marketItem.ItemName.Equals(username))
                 return null;
-            player.Money -= marketItem.Price * item.Ammount;
+            // Maybe sell all items for marketItem.Price? 
+            player.Money -= (marketItem.Price * item.Ammount);
             _playerService.UpdatePlayer(player);
             var playerItem = await _itemService.GetPlayerItem(username, item.ItemName);
             if (playerItem == null)
@@ -133,6 +134,35 @@ namespace IdleGame.ApplicationServices.Services
                 _itemService.PutMarketItem(marketItem);
             }
             return _mappingService.Map<MarketItemEntity>(item);
+        }
+        public async Task<MarketItemEntity> CancelMarketListing(string username, MarketItemDto item)
+        {
+            var player = await _playerService.GetPlayer(username);
+            // Parasyt normalu repository metoda kad gaut item pagal id
+            var marketItem = (await _itemService.GetPlayerMarketItems(item.Player)).FirstOrDefault(x => x.ItemName.Equals(item.ItemName));
+            if(marketItem == null)
+                return null;
+            if(marketItem.Player != player.Username)
+                return null;
+            
+            var playerItem = await _itemService.GetPlayerItem(username, marketItem.ItemName);
+            if (playerItem == null)
+            {
+                var newPlayerItem = new PlayerItemEntity
+                {
+                    PlayerUsername = username,
+                    Ammount = marketItem.Ammount,
+                    Item = new ItemEntity { Name = marketItem.ItemName }
+                };
+                await _itemService.PostPlayerItem(newPlayerItem);
+            }
+            else
+            {
+                playerItem.Ammount += marketItem.Ammount;
+                _itemService.PutPlayerItem(playerItem);
+            }
+
+            return _itemService.DeleteMarketItem(marketItem); ;
         }
     }
 }

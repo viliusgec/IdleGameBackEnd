@@ -1,5 +1,6 @@
 ﻿using IdleGame.Api.Contracts;
 using IdleGame.ApplicationServices.Services;
+using IdleGame.Domain.Entities;
 using IdleGame.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -74,8 +75,8 @@ namespace IdleGame.Api.Host.Controllers
         [Authorize]
         public async Task<ActionResult<MarketItemDto>> SellMarketItem(MarketItemDto playerItem)
         {
-            if(!User.Claims.First(c => c.Type == "Username").Value.Equals(playerItem.Player))
-                return BadRequest();
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            playerItem.Player = username;
             var result = await _itemService.SellMarketItems(playerItem);
             return Ok(_mappingService.Map<MarketItemDto>(result));
         }
@@ -92,5 +93,38 @@ namespace IdleGame.Api.Host.Controllers
                 return BadRequest();
             return Ok(_mappingService.Map<MarketItemDto>(result));
         }
+
+        [HttpPost]
+        [Route("CancelMarketListing")]
+        [Authorize]
+        public async Task<ActionResult<MarketItemEntity>> CancelMarketListing(MarketItemDto marketItem)
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _itemService.CancelMarketListing(username, marketItem);
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<MarketItemDto>(result));
+        }
+
+        [HttpGet]
+        [Route("MarketItems")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<MarketItemDto>>> GetMarketItems()
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = (await _itemService.GetMarketItems()).Where(x => !x.Player.Equals(username));
+            return Ok(_mappingService.Map<IEnumerable<MarketItemDto>>(result));
+        }
+
+        [HttpGet]
+        [Route("PlayerMarketItems")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<MarketItemDto>>> GetPlayerMarketItems()
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _itemService.GetPlayerMarketItems(username);
+            return Ok(_mappingService.Map<IEnumerable<MarketItemDto>>(result));
+        }
+
     }
 }

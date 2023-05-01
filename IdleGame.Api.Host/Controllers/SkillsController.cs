@@ -48,5 +48,29 @@ namespace IdleGame.Api.Host.Controllers
                 return BadRequest();
             return Ok(_mappingService.Map<SkillDto>(result));
         }
+
+        [HttpGet]
+        [Route("Achievements")]
+        [Authorize]
+        public async Task<ActionResult<PlayerAchievementsDto>> Achievements()
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _skillService.GetPlayerAchievements(username);
+            if (result == null) 
+                return BadRequest();
+            return Ok(_mappingService.Map<IEnumerable<PlayerAchievementsDto>>(result));
+        }
+
+        [HttpPost]
+        [Route("ClaimAchievement")]
+        [Authorize]
+        public async Task<ActionResult<PlayerAchievementsDto>> ClaimAchievement(PlayerAchievementsDto achievement)
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _skillService.CollectPlayerAchievement(achievement.Id, username);
+            if (result == null) 
+                return BadRequest();
+            return Ok(_mappingService.Map<PlayerAchievementsDto>(result));
+        }
     }
 }

@@ -66,5 +66,56 @@ namespace IdleGame.Infrastructure.Repositories
             }
             return skill;
         }
+
+        public PlayerAchievementsEntity PutPlayerAchievement(PlayerAchievementsEntity achievement)
+        {
+            _context.Entry(_mappingService.Map<PlayerAchievementsModel>(achievement)).State = EntityState.Modified;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return achievement;
+        }
+
+        public async Task<PlayerAchievementsEntity> PostPlayerAchievement(PlayerAchievementsEntity achievement)
+        {
+            await _context.PlayerAchievements.AddAsync(_mappingService.Map<PlayerAchievementsModel>(achievement));
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+            return achievement;
+        }
+
+        public async Task<IEnumerable<PlayerAchievementsEntity>> GetPlayerAchievements(string username)
+        {
+            return await _context.PlayerAchievements.AsNoTracking().Where(x => x.PlayerUsername == username)
+                .Join(_context.Achievements,
+                    playerAchievement => playerAchievement.AchievementId,
+                    achievement => achievement.Id,
+                    (playerAchievement, achievement) => new PlayerAchievementsEntity
+                    {
+                        Id = playerAchievement.Id,
+                        PlayerUsername = username,
+                        Achieved = playerAchievement.Achieved,
+                        Achievement = _mappingService.Map<AchievementsEntity>(achievement)
+                    }
+                ).ToListAsync();
+        }
+        
+        public async Task<IEnumerable<AchievementsEntity>> GetAchievements()
+        {
+            var achievements = await _context.Achievements.ToListAsync();
+            return _mappingService.Map<IEnumerable<AchievementsEntity>>(achievements);
+        }
+
     }
 }

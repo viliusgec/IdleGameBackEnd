@@ -32,15 +32,15 @@ namespace IdleGame.ApplicationServices.Services
             if (userSkill.Experience < trainingSkill.SkillLevelRequired * 10)
                 return null;
             // add needed item validation
-                
+
             if (!trainingSkill.NeededItem.IsNullOrEmpty())
             {
                 var neededPlayerItem = await _itemRetrievalService.GetPlayerItem(username, trainingSkill.NeededItem);
-                if(neededPlayerItem == null)
+                if (neededPlayerItem == null)
                 {
                     return null;
                 }
-                if(neededPlayerItem.Ammount < trainingSkill.NeededItemAmount)
+                if (neededPlayerItem.Ammount < trainingSkill.NeededItemAmount)
                 {
                     return null;
                 }
@@ -48,7 +48,7 @@ namespace IdleGame.ApplicationServices.Services
                 _itemRetrievalService.PutPlayerItem(neededPlayerItem);
             }
             var playerItem = await _itemRetrievalService.GetPlayerItem(username, trainingSkill.GivenItem);
-            if(playerItem == null)
+            if (playerItem == null)
             {
                 var newPlayerItem = new PlayerItemEntity
                 {
@@ -64,6 +64,26 @@ namespace IdleGame.ApplicationServices.Services
                 _itemRetrievalService.PutPlayerItem(playerItem);
             }
             return _skillService.PutUserSkill(userSkill, trainingSkill);
+        }
+
+        public async Task<PlayerAchievementsEntity> CollectPlayerAchievement(int achievementId, string username)
+        {
+            var achievement = (await _skillService.GetPlayerAchievements(username)).First(x => x.Achievement.Id == achievementId);
+            var playerSkill = await _skillService.GetUserSkill(achievement.Achievement.SkillType, username);
+            if (achievement.Achievement.RequiredXP > playerSkill.Experience)
+                return null;
+            if (achievement.Achieved)
+                return null;
+            playerSkill.Experience += achievement.Achievement.Reward;
+            _skillService.PutUserSkill(playerSkill);
+            achievement.Achieved = true;
+            _skillService.PutPlayerAchievement(achievement);
+            return achievement;
+        }
+
+        public Task<IEnumerable<PlayerAchievementsEntity>> GetPlayerAchievements(string username)
+        {
+            return _skillService.GetPlayerAchievements(username);
         }
     }
 }

@@ -10,5 +10,9 @@ namespace IdleGame.Domain.Repositories
         public SkillEntity PutUserSkill(SkillEntity skill);
         public Task<IEnumerable<TrainingSkillEntity>> GetTrainingSkillsBySkillName(string skillName);
         public Task<TrainingSkillEntity> GetTrainingSkill(string skillName);
+        public Task<PlayerAchievementsEntity> PostPlayerAchievement(PlayerAchievementsEntity achievement);
+        public PlayerAchievementsEntity PutPlayerAchievement(PlayerAchievementsEntity achievement);
+        public Task<IEnumerable<PlayerAchievementsEntity>> GetPlayerAchievements(string username);
+        public Task<IEnumerable<AchievementsEntity>> GetAchievements();
     }
 }

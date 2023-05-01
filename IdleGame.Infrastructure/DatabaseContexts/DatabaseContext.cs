@@ -20,5 +20,7 @@ namespace IdleGame.Infrastructure.DatabaseContext
         public DbSet<TrainingSkillModel> TrainingSkills { get; set; }
         public DbSet<BattleModel> Battles { get; set; }
         public DbSet<MonsterModel> Monsters { get; set; }
+        public DbSet<AchievementsModel> Achievements { get; set; }
+        public DbSet<PlayerAchievementsModel> PlayerAchievements { get; set; }
     }
 }

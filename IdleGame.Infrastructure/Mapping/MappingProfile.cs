@@ -25,13 +25,39 @@ namespace IdleGame.Infrastructure.Mapping
             CreateMap<BattleModel, BattleEntity>().ReverseMap();
             CreateMap<MarketItemEntity, MarketItemDto>().ReverseMap();
             CreateMap<MarketItemModel, MarketItemEntity>().ReverseMap();
+            
             CreateMap<PlayerItemEntity, PlayerItemDto>()
                 .ForMember(destination => destination.ItemName, opts => opts.MapFrom(source => source.Item.Name))
                 .ForMember(destination => destination.Level, opts => opts.MapFrom(source => source.Item.Level))
                 .ForMember(destination => destination.Description, opts => opts.MapFrom(source => source.Item.Description))
                 .ForMember(destination => destination.Price, opts => opts.MapFrom(source => source.Item.Price));
+            
             CreateMap<PlayerItemEntity, PlayerItemModel>()
                 .ForMember(destination => destination.ItemName, opts => opts.MapFrom(source => source.Item.Name));
+
+            CreateMap<PlayerAchievementsEntity, PlayerAchievementsDto>()
+                .ForMember(destination => destination.SkillType, opts => opts.MapFrom(source => source.Achievement.SkillType))
+                .ForMember(destination => destination.RequiredXP, opts => opts.MapFrom(source => source.Achievement.RequiredXP))
+                .ForMember(destination => destination.Reward, opts => opts.MapFrom(source => source.Achievement.Reward))
+                .ForMember(destination => destination.Description, opts => opts.MapFrom(source => source.Achievement.Description));
+
+            CreateMap<PlayerAchievementsEntity, PlayerAchievementsModel>()
+                .ForMember(destination => destination.AchievementId, opts => opts.MapFrom(source => source.Achievement.Id));
+
+            CreateMap<PlayerAchievementsModel, PlayerAchievementsEntity>()
+                .ConstructUsing(x => new PlayerAchievementsEntity
+                {
+                    Id = x.Id,
+                    PlayerUsername = x.PlayerUsername,
+                    Achieved = x.Achieved,
+                    Achievement = new AchievementsEntity
+                    {
+                        Id = x.AchievementId
+                    }
+                });
+
+            CreateMap<AchievementsEntity, AchievementsModel>().ReverseMap();
+            
         }
     }
 }

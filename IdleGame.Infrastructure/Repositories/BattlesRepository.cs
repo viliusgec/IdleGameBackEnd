@@ -37,16 +37,22 @@ namespace IdleGame.Infrastructure.Repositories
         
         public async Task<BattleEntity> PostBattle(BattleEntity battle)
         {
-            await _context.Battles.AddAsync(_mappingService.Map<BattleModel>(battle));
+            // For some reason when using mapper it sets ID as 0 and EF Core won't populate it later. 
+            var newBattle = new BattleModel { Player = battle.Player, BattleFinished = false, ItemGiven = battle.ItemGiven, Monster = battle.Monster, MonsterHP = battle.MonsterHP, PlayerHP = battle.MonsterHP };
+            //await _context.Battles.AddAsync(_mappingService.Map<BattleModel>(battle));
+            await _context.Battles.AddAsync(newBattle);
             try
             {
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                var id = newBattle.ID;
+                return _mappingService.Map<BattleEntity>(newBattle);
             }
             catch (DbUpdateException)
             {
                 throw;
             }
-            return battle;
+            
+            
         }
 
         public BattleEntity PutBattle(BattleEntity battle)

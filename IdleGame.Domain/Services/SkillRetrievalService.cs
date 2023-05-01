@@ -42,5 +42,29 @@ namespace IdleGame.Domain.Services
             skill.Experience += trainingSkill.XpGiven;
             return _skillRepository.PutUserSkill(skill);
         }
+
+        public SkillEntity PutUserSkill(SkillEntity skill)
+        {
+            return _skillRepository.PutUserSkill(skill);
+        }
+
+        public Task<PlayerAchievementsEntity> PostPlayerAchievement(PlayerAchievementsEntity achievement)
+        {
+            return _skillRepository.PostPlayerAchievement(achievement);
+        }
+
+        public PlayerAchievementsEntity PutPlayerAchievement(PlayerAchievementsEntity achievement)
+        {
+            return _skillRepository.PutPlayerAchievement(achievement);
+        }
+
+        public Task<IEnumerable<PlayerAchievementsEntity>> GetPlayerAchievements(string username)
+        {
+            return _skillRepository.GetPlayerAchievements(username);
+        }
+        public Task<IEnumerable<AchievementsEntity>> GetAchievements()
+        {
+            return _skillRepository.GetAchievements();
+        }
     }
 }
