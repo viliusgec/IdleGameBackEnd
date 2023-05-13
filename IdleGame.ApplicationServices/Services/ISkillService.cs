@@ -9,5 +9,10 @@ namespace IdleGame.ApplicationServices.Services
         public Task<SkillEntity> TrainSkill(string trainingSkill, string username);
         public Task<PlayerAchievementsEntity> CollectPlayerAchievement(int achievementId, string username);
         public Task<IEnumerable<PlayerAchievementsEntity>> GetPlayerAchievements(string username);
+        public Task<PlayerIdleTrainingEntity> StartIdleTraining(int id, string username);
+        public Task<PlayerIdleTrainingEntity> StopIdleTraining(string username);
+        public Task<PlayerIdleTrainingEntity> StopIdleTrainingAction(string username);
+        public Task<IEnumerable<IdleTrainingEntity>> GetIdleTrainings();
+        public Task<PlayerIdleTrainingEntity> GetActiveIdleTraining(string username);
     }
 }

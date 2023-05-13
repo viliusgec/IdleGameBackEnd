@@ -15,6 +15,10 @@ namespace IdleGame.Domain.Services
         public Task<PlayerAchievementsEntity> PostPlayerAchievement(PlayerAchievementsEntity achievement);
         public Task<IEnumerable<PlayerAchievementsEntity>> GetPlayerAchievements(string username);
         public Task<IEnumerable<AchievementsEntity>> GetAchievements();
+        public Task<IEnumerable<IdleTrainingEntity>> GetIdleTrainings();
+        public Task<PlayerIdleTrainingEntity> GetPlayerIdleTraining(string username);
+        public Task<PlayerIdleTrainingEntity> PutPlayerIdleTraining(PlayerIdleTrainingEntity training);
+        public Task<PlayerIdleTrainingEntity> PostPlayerIdleTraining(PlayerIdleTrainingEntity training);
 
     }
 }

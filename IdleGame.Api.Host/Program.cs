@@ -49,7 +49,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 string databaseConnectionString = Configuration.GetSection("Database")["ConnectionString"] + Configuration.GetSection("Database")["Password"];
 builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseNpgsql(databaseConnectionString));
+{
+    options.UseNpgsql(databaseConnectionString);
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+});
 
 builder.Services.ConfigureMapping();
 builder.Services.ConfigureInjection();

@@ -40,7 +40,6 @@ namespace IdleGame.Infrastructure.Repositories
             try
             {
                 _context.Entry(_mappingService.Map<PlayerModel>(player)).State = EntityState.Modified;
-                var a = "test";
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)

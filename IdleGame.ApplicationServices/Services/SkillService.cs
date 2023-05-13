@@ -85,5 +85,54 @@ namespace IdleGame.ApplicationServices.Services
         {
             return _skillService.GetPlayerAchievements(username);
         }
+
+        // Call what ever u want
+        public async Task<PlayerIdleTrainingEntity> StartIdleTraining(int id, string username)
+        {
+            var training = await _skillService.GetPlayerIdleTraining(username);
+            if (training.Active)
+                await StopIdleTrainingAction(username);
+            //get training and check if player can start it
+            training.IdleTraining.Id = id;
+            training.StartTime = DateTime.UtcNow;
+            training.Active = true;
+            await _skillService.PutPlayerIdleTraining(training);
+            return training;
+        }
+
+        public async Task<PlayerIdleTrainingEntity> StopIdleTrainingAction(string username)
+        {
+            var training = await _skillService.GetPlayerIdleTraining(username);
+            if (!training.Active)
+                return null;
+            var playerSkill = await _skillService.GetUserSkill(training.IdleTraining.SkillName, username);
+            var diff = (DateTime.UtcNow - training.StartTime).TotalMinutes;
+            if (diff > 1440)
+                diff = 1440;
+            playerSkill.Experience += ((int)diff * training.IdleTraining.XpGiven);
+            _skillService.PutUserSkill(playerSkill); 
+            training.Active = false;
+            //await _skillService.PutPlayerIdleTraining(training);
+            return training;
+        }
+
+        public async Task<PlayerIdleTrainingEntity> StopIdleTraining(string username)
+        {
+            var training = await _skillService.GetPlayerIdleTraining(username);
+            if (training.Active)
+                await StopIdleTrainingAction(username);
+            await _skillService.PutPlayerIdleTraining(training);
+            return training;
+        }
+
+        public async Task<IEnumerable<IdleTrainingEntity>> GetIdleTrainings()
+        {
+            return await _skillService.GetIdleTrainings();
+        }
+
+        public async Task<PlayerIdleTrainingEntity> GetActiveIdleTraining(string username)
+        {
+            return await _skillService.GetPlayerIdleTraining(username);
+        }
     }
 }

@@ -66,5 +66,28 @@ namespace IdleGame.Domain.Services
         {
             return _skillRepository.GetAchievements();
         }
+        public Task<PlayerIdleTrainingEntity> PostPlayerIdleTraining(PlayerIdleTrainingEntity training)
+        {
+            return _skillRepository.PostPlayerIdleTraining(training);
+        }
+
+        public Task<PlayerIdleTrainingEntity> PutPlayerIdleTraining(PlayerIdleTrainingEntity training)
+        {
+            return _skillRepository.PutPlayerIdleTraining(training);
+        }
+
+        public Task<PlayerIdleTrainingEntity> GetPlayerIdleTraining(string username)
+        {
+            return _skillRepository.GetPlayerIdleTraining(username);
+        }
+        public Task<IEnumerable<IdleTrainingEntity>> GetIdleTrainings()
+        {
+            return _skillRepository.GetIdleTrainings();
+        }
+/*
+        Task<PlayerIdleTrainingEntity> ISkillRetrievalService.PutPlayerIdleTraining(PlayerIdleTrainingEntity training)
+        {
+            throw new NotImplementedException();
+        }*/
     }
 }

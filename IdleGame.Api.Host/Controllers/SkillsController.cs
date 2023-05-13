@@ -62,15 +62,62 @@ namespace IdleGame.Api.Host.Controllers
         }
 
         [HttpPost]
-        [Route("ClaimAchievement")]
+        [Route("ClaimAchievement/{id}")]
         [Authorize]
-        public async Task<ActionResult<PlayerAchievementsDto>> ClaimAchievement(PlayerAchievementsDto achievement)
+        public async Task<ActionResult<PlayerAchievementsDto>> ClaimAchievement(int id)
         {
             string username = User.Claims.First(c => c.Type == "Username").Value;
-            var result = await _skillService.CollectPlayerAchievement(achievement.Id, username);
+            var result = await _skillService.CollectPlayerAchievement(id, username);
             if (result == null) 
                 return BadRequest();
             return Ok(_mappingService.Map<PlayerAchievementsDto>(result));
+        }
+
+        [HttpPost]
+        [Route("StartIdleTraining/{id}")]
+        [Authorize]
+        public async Task<ActionResult<PlayerIdleTrainingDto>> StartIdleTraining(int id)
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _skillService.StartIdleTraining(id, username);
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<PlayerIdleTrainingDto>(result));
+        }
+
+        [HttpPost]
+        [Route("StopIdleTraining")]
+        [Authorize]
+        public async Task<ActionResult<PlayerIdleTrainingDto>> StopIdleTraining()
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _skillService.StopIdleTraining(username);
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<PlayerIdleTrainingDto>(result));
+        }
+
+        [HttpGet]
+        [Route("GetIdleTrainings")]
+        [Authorize]
+        public async Task<ActionResult<IdleTrainingDto>> GetIdleTrainings()
+        {
+            var result = await _skillService.GetIdleTrainings();
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<IEnumerable<IdleTrainingDto>>(result));
+        }
+
+        [HttpGet]
+        [Route("GetActiveIdleTraining")]
+        [Authorize]
+        public async Task<ActionResult<IdleTrainingDto>> GetActiveIdleTraining()
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _skillService.GetActiveIdleTraining(username);
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<IEnumerable<PlayerIdleTrainingDto>>(result));
         }
     }
 }

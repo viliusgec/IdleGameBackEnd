@@ -117,5 +117,63 @@ namespace IdleGame.Infrastructure.Repositories
             return _mappingService.Map<IEnumerable<AchievementsEntity>>(achievements);
         }
 
+        public async Task<IEnumerable<IdleTrainingEntity>> GetIdleTrainings()
+        {
+            var trainings = await _context.IdleTraining.ToListAsync();
+            return _mappingService.Map<IEnumerable<IdleTrainingEntity>>(trainings);
+        }
+        
+        public async Task<PlayerIdleTrainingEntity> GetPlayerIdleTraining(string username)
+        {
+            var training = await _context.PlayerIdleTrainings.AsNoTracking().Where(x => x.PlayerUsername.Equals(username))
+                .Join(_context.IdleTraining, 
+                    playerIdleTraining => playerIdleTraining.IdleTrainingId,
+                    idleTraining => idleTraining.Id,
+                    (playerIdleTraining, idleTraining) => new PlayerIdleTrainingEntity
+                    {
+                        Id = playerIdleTraining.Id,
+                        PlayerUsername = playerIdleTraining.PlayerUsername,
+                        StartTime = playerIdleTraining.StartTime,
+                        Active = playerIdleTraining.Active,
+                        IdleTraining = _mappingService.Map<IdleTrainingEntity>(idleTraining)
+                    }
+                    ).FirstAsync();
+            return _mappingService.Map<PlayerIdleTrainingEntity>(training);
+        }
+
+        public async Task<PlayerIdleTrainingEntity> PutPlayerIdleTraining(PlayerIdleTrainingEntity training)
+        {
+            try
+            {
+                var b = _context.Entry(_mappingService.Map<PlayerIdleTrainingModel>(training));
+                if(b.State != EntityState.Modified)
+                {
+                    _context.Entry(_mappingService.Map<PlayerIdleTrainingModel>(training)).State = EntityState.Modified;
+                }
+                
+                var a = 1;
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return training;
+        }
+
+        public async Task<PlayerIdleTrainingEntity> PostPlayerIdleTraining(PlayerIdleTrainingEntity training)
+        {
+            await _context.PlayerIdleTrainings.AddAsync(_mappingService.Map<PlayerIdleTrainingModel>(training));
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+            return training;
+        }
+
     }
 }
