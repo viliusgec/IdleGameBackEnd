@@ -120,7 +120,7 @@ namespace IdleGame.ApplicationServices.Services
         {
             var training = await _skillService.GetPlayerIdleTraining(username);
             if (training.Active)
-                await StopIdleTrainingAction(username);
+                training = await StopIdleTrainingAction(username);
             await _skillService.PutPlayerIdleTraining(training);
             return training;
         }

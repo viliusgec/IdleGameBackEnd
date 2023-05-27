@@ -111,13 +111,13 @@ namespace IdleGame.Api.Host.Controllers
         [HttpGet]
         [Route("GetActiveIdleTraining")]
         [Authorize]
-        public async Task<ActionResult<IdleTrainingDto>> GetActiveIdleTraining()
+        public async Task<ActionResult<PlayerIdleTrainingDto>> GetActiveIdleTraining()
         {
             string username = User.Claims.First(c => c.Type == "Username").Value;
             var result = await _skillService.GetActiveIdleTraining(username);
             if (result == null)
                 return BadRequest();
-            return Ok(_mappingService.Map<IEnumerable<PlayerIdleTrainingDto>>(result));
+            return Ok(_mappingService.Map<PlayerIdleTrainingDto>(result));
         }
     }
 }
