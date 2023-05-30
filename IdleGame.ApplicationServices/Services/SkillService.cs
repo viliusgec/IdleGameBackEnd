@@ -40,11 +40,11 @@ namespace IdleGame.ApplicationServices.Services
                 {
                     return null;
                 }
-                if (neededPlayerItem.Ammount < trainingSkill.NeededItemAmount)
+                if (neededPlayerItem.Amount < trainingSkill.NeededItemAmount)
                 {
                     return null;
                 }
-                neededPlayerItem.Ammount -= trainingSkill.NeededItemAmount ?? 1;
+                neededPlayerItem.Amount -= trainingSkill.NeededItemAmount ?? 1;
                 _itemRetrievalService.PutPlayerItem(neededPlayerItem);
             }
             var playerItem = await _itemRetrievalService.GetPlayerItem(username, trainingSkill.GivenItem);
@@ -53,14 +53,14 @@ namespace IdleGame.ApplicationServices.Services
                 var newPlayerItem = new PlayerItemEntity
                 {
                     PlayerUsername = username,
-                    Ammount = trainingSkill.GivenItemAmount ?? 1,
+                    Amount = trainingSkill.GivenItemAmount ?? 1,
                     Item = new ItemEntity { Name = trainingSkill.GivenItem }
                 };
                 await _itemRetrievalService.PostPlayerItem(newPlayerItem);
             }
             else
             {
-                playerItem.Ammount += trainingSkill.GivenItemAmount ?? 1;
+                playerItem.Amount += trainingSkill.GivenItemAmount ?? 1;
                 _itemRetrievalService.PutPlayerItem(playerItem);
             }
             return _skillService.PutUserSkill(userSkill, trainingSkill);

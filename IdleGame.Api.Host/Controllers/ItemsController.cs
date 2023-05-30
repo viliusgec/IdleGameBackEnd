@@ -50,21 +50,21 @@ namespace IdleGame.Api.Host.Controllers
         [HttpPost]
         [Route("SellPlayerItems")]
         [Authorize]
-        public async Task<ActionResult<PlayerItemDto>> SellPlayerItems(PlayerItemDto playerItem, int sellAmmount)
+        public async Task<ActionResult<PlayerItemDto>> SellPlayerItems(PlayerItemDto playerItem, int sellAmount)
         {
             string username = User.Claims.First(c => c.Type == "Username").Value;
-            var result = await _itemService.SellPlayerItems(username, playerItem, sellAmmount);
+            var result = await _itemService.SellPlayerItems(username, playerItem, sellAmount);
             return Ok(_mappingService.Map<PlayerItemDto>(result));
         }
 
         [HttpPost]
         [Route("BuyItems")]
         [Authorize]
-        public async Task<ActionResult<PlayerDto>> BuyItems(string itemName, int buyAmmount)
+        public async Task<ActionResult<PlayerDto>> BuyItems(string itemName, int buyAmount)
         {
             string username = User.Claims.First(c => c.Type == "Username").Value;
 
-            var result = await _itemService.BuyItems(username, itemName, buyAmmount);
+            var result = await _itemService.BuyItems(username, itemName, buyAmount);
             if (result == null)
                 return BadRequest();
             return Ok(_mappingService.Map<PlayerDto>(result));

@@ -31,30 +31,30 @@ namespace IdleGame.ApplicationServices.Services
             return _itemService.GetPlayerItems(username);
         }
 
-        public async Task<PlayerItemEntity> SellPlayerItems(string username, PlayerItemDto playerItem, int ammount)
+        public async Task<PlayerItemEntity> SellPlayerItems(string username, PlayerItemDto playerItem, int Amount)
         {
             var aplayerItem = await _itemService.GetPlayerItem(username, playerItem.ItemName);
             if (aplayerItem == null)
                 return null;
-            if (aplayerItem.Ammount < ammount && aplayerItem.Item.isSellable)
+            if (aplayerItem.Amount < Amount && aplayerItem.Item.isSellable)
                 return null;
-            aplayerItem.Ammount -= ammount;
+            aplayerItem.Amount -= Amount;
             aplayerItem = _itemService.PutPlayerItem(aplayerItem);
             var player = await _playerService.GetPlayer(username);
-            player.Money += aplayerItem.Item.Price * ammount;
+            player.Money += aplayerItem.Item.Price * Amount;
             _playerService.UpdatePlayer(player);
             return aplayerItem;
         }
 
-        public async Task<PlayerEntity> BuyItems(string username, string itemName, int ammount)
+        public async Task<PlayerEntity> BuyItems(string username, string itemName, int Amount)
         {
             var player = await _playerService.GetPlayer(username);
             var shopItem = (await _itemService.GetShopItems()).FirstOrDefault(x => x.Name.Equals(itemName));
             if (shopItem == null)
                 return null;
-            if (player.Money < shopItem.SellPrice * ammount || shopItem.SellPrice == null)
+            if (player.Money < shopItem.SellPrice * Amount || shopItem.SellPrice == null)
                 return null;
-            player.Money -= (int) shopItem.SellPrice * ammount;
+            player.Money -= (int) shopItem.SellPrice * Amount;
             _playerService.UpdatePlayer(player);
             var playerItem = await _itemService.GetPlayerItem(username, itemName);
             if (playerItem == null)
@@ -62,14 +62,14 @@ namespace IdleGame.ApplicationServices.Services
                 var newPlayerItem = new PlayerItemEntity
                 {
                     PlayerUsername = username,
-                    Ammount = ammount,
+                    Amount = Amount,
                     Item = new ItemEntity { Name = itemName }
                 };
                 await _itemService.PostPlayerItem(newPlayerItem);
             }
             else
             {
-                playerItem.Ammount += ammount;
+                playerItem.Amount += Amount;
                 _itemService.PutPlayerItem(playerItem);
             }
             return player;
@@ -90,7 +90,7 @@ namespace IdleGame.ApplicationServices.Services
             var playerItem = await _itemService.GetPlayerItem(item.Player, item.ItemName);
             if (playerItem == null)
                 return null;
-            playerItem.Ammount -= item.Ammount;
+            playerItem.Amount -= item.Amount;
             _itemService.PutPlayerItem(playerItem);
             return await _itemService.PostMarketItem(_mappingService.Map<MarketItemEntity>(item));
         }
@@ -102,10 +102,10 @@ namespace IdleGame.ApplicationServices.Services
             var marketItem = (await _itemService.GetPlayerMarketItems(item.Player)).FirstOrDefault(x => x.ItemName.Equals(item.ItemName));
             if (marketItem == null)
                 return null;
-            if (player.Money < marketItem.Price * item.Ammount || marketItem.Ammount < item.Ammount || marketItem.ItemName.Equals(username))
+            if (player.Money < marketItem.Price * item.Amount || marketItem.Amount < item.Amount || marketItem.ItemName.Equals(username))
                 return null;
             // Maybe sell all items for marketItem.Price? 
-            player.Money -= (marketItem.Price * item.Ammount);
+            player.Money -= (marketItem.Price * item.Amount);
             _playerService.UpdatePlayer(player);
             var playerItem = await _itemService.GetPlayerItem(username, item.ItemName);
             if (playerItem == null)
@@ -113,24 +113,24 @@ namespace IdleGame.ApplicationServices.Services
                 var newPlayerItem = new PlayerItemEntity
                 {
                     PlayerUsername = username,
-                    Ammount = item.Ammount,
+                    Amount = item.Amount,
                     Item = new ItemEntity { Name = item.ItemName }
                 };
                 await _itemService.PostPlayerItem(newPlayerItem);
             }
             else
             {
-                playerItem.Ammount += item.Ammount;
+                playerItem.Amount += item.Amount;
                 _itemService.PutPlayerItem(playerItem);
             }
             var itemOwner = await _playerService.GetPlayer(marketItem.Player);
-            itemOwner.Money += marketItem.Price * item.Ammount;
+            itemOwner.Money += marketItem.Price * item.Amount;
             _playerService.UpdatePlayer(itemOwner);
-            if (item.Ammount == marketItem.Ammount)
+            if (item.Amount == marketItem.Amount)
                 _itemService.DeleteMarketItem(marketItem);
             else
             {
-                marketItem.Ammount -= item.Ammount;
+                marketItem.Amount -= item.Amount;
                 _itemService.PutMarketItem(marketItem);
             }
             return _mappingService.Map<MarketItemEntity>(item);
@@ -151,14 +151,14 @@ namespace IdleGame.ApplicationServices.Services
                 var newPlayerItem = new PlayerItemEntity
                 {
                     PlayerUsername = username,
-                    Ammount = marketItem.Ammount,
+                    Amount = marketItem.Amount,
                     Item = new ItemEntity { Name = marketItem.ItemName }
                 };
                 await _itemService.PostPlayerItem(newPlayerItem);
             }
             else
             {
-                playerItem.Ammount += marketItem.Ammount;
+                playerItem.Amount += marketItem.Amount;
                 _itemService.PutPlayerItem(playerItem);
             }
 

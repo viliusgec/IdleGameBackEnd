@@ -42,7 +42,7 @@ namespace IdleGame.Infrastructure.Repositories
                         Id = userItem.Id,
                         PlayerUsername = username,
                         IsEquiped = userItem.IsEquiped,
-                        Ammount = userItem.Ammount,
+                        Amount = userItem.Amount,
                         Item = new ItemEntity
                         {
                             Name = userItem.ItemName,
@@ -65,7 +65,7 @@ namespace IdleGame.Infrastructure.Repositories
                         Id = userItem.Id,
                         PlayerUsername = username,
                         IsEquiped = userItem.IsEquiped,
-                        Ammount = userItem.Ammount,
+                        Amount = userItem.Amount,
                         Item = new ItemEntity
                         {
                             Name = userItem.ItemName,

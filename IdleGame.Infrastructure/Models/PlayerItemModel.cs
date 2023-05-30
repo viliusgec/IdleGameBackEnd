@@ -8,7 +8,7 @@ namespace IdleGame.Infrastructure.Models
         public int Id { get; set; }
         public string PlayerUsername { get; set; }
         public bool IsEquiped { get; set; }
-        public int Ammount { get; set; }
+        public int Amount { get; set; }
         public string ItemName { get; set; }
     }
 }

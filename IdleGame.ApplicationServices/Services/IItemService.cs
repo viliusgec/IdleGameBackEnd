@@ -13,7 +13,7 @@ namespace IdleGame.ApplicationServices.Services
         public Task<MarketItemEntity> BuyMarketItems(string username, MarketItemDto item);
         public Task<MarketItemEntity> CancelMarketListing(string username, MarketItemDto item);
         public Task<IEnumerable<PlayerItemEntity>> GetPlayerItems(string username);
-        public Task<PlayerItemEntity> SellPlayerItems(string username, PlayerItemDto playerItem, int ammount);
-        public Task<PlayerEntity> BuyItems(string username, string item, int ammount);
+        public Task<PlayerItemEntity> SellPlayerItems(string username, PlayerItemDto playerItem, int Amount);
+        public Task<PlayerEntity> BuyItems(string username, string item, int Amount);
     }
 }

@@ -51,14 +51,14 @@ namespace IdleGame.ApplicationServices.Services
                         var newPlayerItem = new PlayerItemEntity
                         {
                             PlayerUsername = playerName,
-                            Ammount = 1,
+                            Amount = 1,
                             Item = new ItemEntity { Name = monster.DroppedItem }
                         };
                         await _itemService.PostPlayerItem(newPlayerItem);
                     }
                     else
                     {
-                        playerItem.Ammount += 1;
+                        playerItem.Amount += 1;
                         _itemService.PutPlayerItem(playerItem);
                     }
                 }

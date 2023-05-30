@@ -18,7 +18,7 @@ namespace IdleGame.Api.Host.Hubs
 
         public async Task startGame(string username)
         {
-            await Clients.All.SendAsync("gameStarted", username);
+            await Clients.All.SendAsync("gameStarted", username);   
         }        
     }
 }
