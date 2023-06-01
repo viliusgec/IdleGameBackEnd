@@ -1,5 +1,6 @@
 ﻿using IdleGame.Api.Contracts;
 using IdleGame.ApplicationServices.Services;
+using IdleGame.Domain.Entities;
 using IdleGame.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -118,6 +119,17 @@ namespace IdleGame.Api.Host.Controllers
             if (result == null)
                 return BadRequest();
             return Ok(_mappingService.Map<PlayerIdleTrainingDto>(result));
+        }
+
+        [HttpGet]
+        [Route("GetLeadersBySkill")]
+        //[Authorize]
+        public async Task<ActionResult<IEnumerable<LeadershipDto>>> GetLeadersBySkill(string skillName, int? leadersCount)
+        {
+            var result = await _skillService.GetLeadersBySkill(skillName, leadersCount);
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<IEnumerable<LeadershipDto>>(result));
         }
     }
 }

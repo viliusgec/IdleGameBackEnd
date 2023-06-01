@@ -14,5 +14,6 @@ namespace IdleGame.ApplicationServices.Services
         public Task<PlayerIdleTrainingEntity> StopIdleTrainingAction(string username);
         public Task<IEnumerable<IdleTrainingEntity>> GetIdleTrainings();
         public Task<PlayerIdleTrainingEntity> GetActiveIdleTraining(string username);
+        public Task<IEnumerable<SkillEntity>> GetLeadersBySkill(string skillName, int? leadersCount);
     }
 }

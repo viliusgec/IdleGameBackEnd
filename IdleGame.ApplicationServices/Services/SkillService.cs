@@ -134,5 +134,10 @@ namespace IdleGame.ApplicationServices.Services
         {
             return await _skillService.GetPlayerIdleTraining(username);
         }
+
+        public async Task<IEnumerable<SkillEntity>> GetLeadersBySkill(string skillName, int? leadersCount)
+        {
+            return await _skillService.GetLeadersBySkill(skillName, leadersCount);
+        }
     }
 }

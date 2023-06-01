@@ -84,10 +84,9 @@ namespace IdleGame.Domain.Services
         {
             return _skillRepository.GetIdleTrainings();
         }
-/*
-        Task<PlayerIdleTrainingEntity> ISkillRetrievalService.PutPlayerIdleTraining(PlayerIdleTrainingEntity training)
+        public Task<IEnumerable<SkillEntity>> GetLeadersBySkill(string skillName, int? leadersCount)
         {
-            throw new NotImplementedException();
-        }*/
+            return _skillRepository.GetLeadersBySkill(skillName, leadersCount);
+        }
     }
 }

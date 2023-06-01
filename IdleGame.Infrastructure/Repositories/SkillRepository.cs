@@ -175,5 +175,11 @@ namespace IdleGame.Infrastructure.Repositories
             return training;
         }
 
+        public async Task<IEnumerable<SkillEntity>> GetLeadersBySkill(string skillName, int? leadersCount)
+        {
+            var players = await _context.Skills.Where(x => x.Name.Equals(skillName)).OrderByDescending(x => x.Experience).Take(leadersCount ?? 100).ToListAsync();
+            return _mappingService.Map<IEnumerable<SkillEntity>>(players);
+        }
+
     }
 }

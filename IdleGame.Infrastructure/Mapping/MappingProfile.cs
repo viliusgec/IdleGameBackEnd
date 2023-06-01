@@ -51,6 +51,7 @@ namespace IdleGame.Infrastructure.Mapping
                     }
                 });
 
+            CreateMap<SkillEntity, LeadershipDto>().ReverseMap();
             CreateMap<AchievementsEntity, AchievementsModel>().ReverseMap();
             CreateMap<IdleTrainingEntity, IdleTrainingModel>().ReverseMap();
             CreateMap<IdleTrainingDto, IdleTrainingEntity>().ReverseMap();
