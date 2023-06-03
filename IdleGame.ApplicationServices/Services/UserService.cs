@@ -61,6 +61,13 @@ namespace IdleGame.ApplicationServices.Services
             {
                 await _skillService.PostSkill(user.Username, skill);
             }
+            var achievements = await _skillService.GetAchievements();
+            foreach(var achievement in achievements)
+            {
+                // perkelt į service retrievals
+                var ach = new PlayerAchievementsEntity { Achieved = false, Achievement = achievement, PlayerUsername = user.Username };
+                await _skillService.PostPlayerAchievement(ach);
+            }
             return newUser;
         }
     }
