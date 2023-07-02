@@ -64,5 +64,24 @@ namespace IdleGame.Domain.Services
         {
             return _itemRepository.DeleteMarketItem(item);
         }
+
+        public Task<IEnumerable<EquippedItemsEntity>> GetPlayerEquippedItems(string username)
+        {
+            return _itemRepository.GetPlayerEquippedItems(username);
+        }
+
+        public Task<EquippedItemsEntity> GetPlayerEquippedItem(string username, string itemType)
+        {
+            return _itemRepository.GetPlayerEquippedItem(username, itemType);
+        }
+        public EquippedItemsEntity PutEquippedItem(EquippedItemsEntity item)
+        {
+            return _itemRepository.PutEquippedItem(item);
+        }
+        public Task<EquippedItemsEntity> PostEquippedItem(EquippedItemsEntity item)
+        {
+            return _itemRepository.PostEquippedItem(item);
+        }
+
     }
 }

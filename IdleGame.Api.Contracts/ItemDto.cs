@@ -8,5 +8,6 @@
         public int Price { get; set; }
         public int? SellPrice { get; set; }
         public bool isSellable { get; set; }
+        public string Type { get; set; }
     }
 }

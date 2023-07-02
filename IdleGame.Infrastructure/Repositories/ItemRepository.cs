@@ -48,7 +48,8 @@ namespace IdleGame.Infrastructure.Repositories
                             Name = userItem.ItemName,
                             Level = item.Level,
                             Description = item.Description,
-                            Price = item.Price
+                            Price = item.Price,
+                            Type = item.Type
                         }
                     }
                 ).ToListAsync();
@@ -72,7 +73,8 @@ namespace IdleGame.Infrastructure.Repositories
                             Level = item.Level,
                             Description = item.Description,
                             Price = item.Price,
-                            isSellable = item.isSellable
+                            isSellable = item.isSellable,
+                            Type = item.Type
                         }
                     }
                 ).FirstOrDefaultAsync();
@@ -154,6 +156,46 @@ namespace IdleGame.Infrastructure.Repositories
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return item;
+        }
+
+        public async Task<IEnumerable<EquippedItemsEntity>> GetPlayerEquippedItems(string username)
+        {
+            var equippedItems = await _context.EquippedItems.AsNoTracking().Where(x => x.PlayerUsername.Equals(username)).ToListAsync();
+            return _mappingService.Map<IEnumerable<EquippedItemsEntity>>(equippedItems);
+        }
+
+        public async Task<EquippedItemsEntity> GetPlayerEquippedItem(string username, string itemType)
+        {
+            var equippedItem = await _context.EquippedItems.FirstOrDefaultAsync(x => x.PlayerUsername.Equals(username) && x.ItemPlace.Equals(itemType));
+            return _mappingService.Map<EquippedItemsEntity>(equippedItem);
+        }
+
+        public EquippedItemsEntity PutEquippedItem(EquippedItemsEntity item)
+        {
+            _context.Entry(_mappingService.Map<EquippedItemsModel>(item)).State = EntityState.Modified;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return item;
+        }
+
+        public async Task<EquippedItemsEntity> PostEquippedItem(EquippedItemsEntity item)
+        {
+            await _context.EquippedItems.AddAsync(_mappingService.Map<EquippedItemsModel>(item));
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException)
             {
                 throw;
             }

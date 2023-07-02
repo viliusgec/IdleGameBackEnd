@@ -126,5 +126,38 @@ namespace IdleGame.Api.Host.Controllers
             return Ok(_mappingService.Map<IEnumerable<MarketItemDto>>(result));
         }
 
+        [HttpGet]
+        [Route("PlayerEquippedItems")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<EquippedItemsDto>>> GetPlayerEquippedItems()
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _itemService.GetPlayerEquippedItems(username);
+            return Ok(_mappingService.Map<IEnumerable<EquippedItemsDto>>(result));
+        }
+
+        [HttpPost]
+        [Route("EquipItem")]
+        [Authorize]
+        public async Task<ActionResult<EquippedItemsDto>> EquipItem(string itemName)
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _itemService.EquipItem(username, itemName);
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<EquippedItemsDto>(result));
+        }
+
+        [HttpPost]
+        [Route("UnEquipItem")]
+        [Authorize]
+        public async Task<ActionResult<EquippedItemsDto>> UnEquipItem(string itemPlace)
+        {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
+            var result = await _itemService.UnEquipItem(username, itemPlace);
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<EquippedItemsDto>(result));
+        }
     }
 }

@@ -54,7 +54,7 @@ namespace IdleGame.ApplicationServices.Services
                 return null;
             if (player.Money < shopItem.SellPrice * Amount || shopItem.SellPrice == null)
                 return null;
-            player.Money -= (int) shopItem.SellPrice * Amount;
+            player.Money -= (int)shopItem.SellPrice * Amount;
             _playerService.UpdatePlayer(player);
             var playerItem = await _itemService.GetPlayerItem(username, itemName);
             if (playerItem == null)
@@ -140,11 +140,11 @@ namespace IdleGame.ApplicationServices.Services
             var player = await _playerService.GetPlayer(username);
             // Parasyt normalu repository metoda kad gaut item pagal id
             var marketItem = (await _itemService.GetPlayerMarketItems(item.Player)).FirstOrDefault(x => x.ItemName.Equals(item.ItemName));
-            if(marketItem == null)
+            if (marketItem == null)
                 return null;
-            if(marketItem.Player != player.Username)
+            if (marketItem.Player != player.Username)
                 return null;
-            
+
             var playerItem = await _itemService.GetPlayerItem(username, marketItem.ItemName);
             if (playerItem == null)
             {
@@ -164,5 +164,39 @@ namespace IdleGame.ApplicationServices.Services
 
             return _itemService.DeleteMarketItem(marketItem); ;
         }
+
+        public Task<IEnumerable<EquippedItemsEntity>> GetPlayerEquippedItems(string username)
+        {
+            return _itemService.GetPlayerEquippedItems(username);
+        }
+
+        public async Task<EquippedItemsEntity> GetPlayerEquippedItem(string username, string itemType)
+        {
+            return await _itemService.GetPlayerEquippedItem(username, itemType);
+        }
+        public async Task<EquippedItemsEntity> EquipItem(string username, string itemName)
+        {
+            // Should get player item instead
+            var item = (await _itemService.GetItems()).FirstOrDefault(x => x.Name.Equals(itemName));
+            if (item == null)
+                return null;
+            var equippedItem = await _itemService.GetPlayerEquippedItem(username, item.Type);
+            if (equippedItem == null)
+                return null;
+            equippedItem.Item = item;
+            return _itemService.PutEquippedItem(equippedItem);
+        }
+
+        public async Task<EquippedItemsEntity> UnEquipItem(string username, string itemPlace)
+        {
+            var equippedItem = await _itemService.GetPlayerEquippedItem(username, itemPlace);
+            equippedItem.Item = null;
+            return _itemService.PutEquippedItem(equippedItem);
+        }
+
+        /* public async Task<EquippedItemsEntity> PostEquippedItem(EquippedItemsEntity item)
+        {
+         Create logic to add equipped item rows to db for new accounts
+        } */
     }
 }

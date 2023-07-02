@@ -15,5 +15,9 @@ namespace IdleGame.Domain.Services
         public Task<PlayerItemEntity> GetPlayerItem(string username, string itemName);
         public Task<PlayerItemEntity> PostPlayerItem(PlayerItemEntity playerItem);
         public PlayerItemEntity PutPlayerItem(PlayerItemEntity playerItem);
+        public Task<IEnumerable<EquippedItemsEntity>> GetPlayerEquippedItems(string username);
+        public Task<EquippedItemsEntity> GetPlayerEquippedItem(string username, string itemType);
+        public EquippedItemsEntity PutEquippedItem(EquippedItemsEntity item);
+        public Task<EquippedItemsEntity> PostEquippedItem(EquippedItemsEntity item);
     }
 }

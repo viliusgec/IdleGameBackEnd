@@ -61,6 +61,12 @@ namespace IdleGame.Infrastructure.Mapping
             CreateMap<PlayerIdleTrainingEntity, PlayerIdleTrainingModel>()
                 .ForMember(destinition => destinition.IdleTrainingId, opts => opts.MapFrom(source => source.IdleTraining.Id));
 
+            CreateMap<EquippedItemsDto, EquippedItemsEntity>().ReverseMap();
+            CreateMap<EquippedItemsEntity, EquippedItemsModel>()
+                .ForMember(destination => destination.Item, opts => opts.MapFrom(source => source.Item.Name));
+
+            CreateMap<EquippedItemsModel, EquippedItemsEntity>()
+                .ForPath(destination => destination.Item.Name, opts => opts.MapFrom(source => source.Item));
         }
     }
 }
