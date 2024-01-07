@@ -177,6 +177,7 @@ namespace IdleGame.ApplicationServices.Services
         public async Task<EquippedItemsEntity> EquipItem(string username, string itemName)
         {
             // Should get player item instead
+            // [TODO]: Add validation if player can equip the item (if xp count meets requirements) 
             var item = (await _itemService.GetItems()).FirstOrDefault(x => x.Name.Equals(itemName));
             if (item == null)
                 return null;
