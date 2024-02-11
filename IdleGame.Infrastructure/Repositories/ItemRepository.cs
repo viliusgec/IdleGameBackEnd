@@ -49,7 +49,10 @@ namespace IdleGame.Infrastructure.Repositories
                             Level = item.Level,
                             Description = item.Description,
                             Price = item.Price,
-                            Type = item.Type
+                            Type = item.Type,
+                            Attack = item.Attack,
+                            Defense = item.Defense,
+                            HP = item.HP                            
                         }
                     }
                 ).ToListAsync();
@@ -74,7 +77,7 @@ namespace IdleGame.Infrastructure.Repositories
                             Description = item.Description,
                             Price = item.Price,
                             isSellable = item.isSellable,
-                            Type = item.Type
+                            Type = item.Type,
                         }
                     }
                 ).FirstOrDefaultAsync();

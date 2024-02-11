@@ -11,5 +11,7 @@
         public string Description { get; set; }
         public bool isSellable { get; set; }
         public string Type { get; set; }
+        public ItemDto Item { get; set; }
+
     }
 }
