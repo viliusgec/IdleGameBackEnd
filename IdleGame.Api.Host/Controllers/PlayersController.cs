@@ -27,5 +27,23 @@ namespace IdleGame.Api.Host.Controllers
             var result = await _playerService.GetPlayer(username);
             return Ok(_mappingService.Map<PlayerDto>(result));
         }
+
+        [HttpPatch]
+        [Route("PatchPlayerInfo")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult<IEnumerable<PlayerItemDto>> PatchPlayerInfo()
+        {
+            // Add patch/put functionality to edit
+            return Ok();
+        }
+
+        [HttpPatch]
+        [Route("PatchUserInfo")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult<IEnumerable<PlayerItemDto>> PatchUserInfo()
+        {
+            // Add patch/put functionality to edit
+            return Ok();
+        }
     }
 }

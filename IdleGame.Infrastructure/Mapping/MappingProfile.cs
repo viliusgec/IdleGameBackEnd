@@ -2,6 +2,7 @@
 using IdleGame.Api.Contracts;
 using IdleGame.Domain.Entities;
 using IdleGame.Infrastructure.Models;
+using System.ComponentModel;
 
 namespace IdleGame.Infrastructure.Mapping
 {
@@ -29,7 +30,8 @@ namespace IdleGame.Infrastructure.Mapping
                 .ForMember(destination => destination.ItemName, opts => opts.MapFrom(source => source.Item.Name))
                 .ForMember(destination => destination.Level, opts => opts.MapFrom(source => source.Item.Level))
                 .ForMember(destination => destination.Description, opts => opts.MapFrom(source => source.Item.Description))
-                .ForMember(destination => destination.Price, opts => opts.MapFrom(source => source.Item.Price));
+                .ForMember(destination => destination.Price, opts => opts.MapFrom(source => source.Item.Price))
+                .ForMember(destination => destination.Type, opts => opts.MapFrom(source => source.Item.Type));
             CreateMap<PlayerItemEntity, PlayerItemModel>()
                 .ForMember(destination => destination.ItemName, opts => opts.MapFrom(source => source.Item.Name));
             CreateMap<PlayerAchievementsEntity, PlayerAchievementsDto>()
