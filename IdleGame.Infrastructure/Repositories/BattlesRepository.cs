@@ -38,7 +38,7 @@ namespace IdleGame.Infrastructure.Repositories
         public async Task<BattleEntity> PostBattle(BattleEntity battle)
         {
             // For some reason when using mapper it sets ID as 0 and EF Core won't populate it later. 
-            var newBattle = new BattleModel { Player = battle.Player, BattleFinished = false, ItemGiven = battle.ItemGiven, Monster = battle.Monster, MonsterHP = battle.MonsterHP, PlayerHP = battle.MonsterHP };
+            var newBattle = new BattleModel { Player = battle.Player, BattleFinished = false, ItemGiven = battle.ItemGiven, Monster = battle.Monster, MonsterHP = battle.MonsterHP, PlayerHP = battle.PlayerHP };
             //await _context.Battles.AddAsync(_mappingService.Map<BattleModel>(battle));
             await _context.Battles.AddAsync(newBattle);
             try
