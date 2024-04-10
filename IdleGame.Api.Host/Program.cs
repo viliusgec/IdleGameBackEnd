@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using IdleGame.Api.Host.Capabilities;
 using IdleGame.Infrastructure.DatabaseContext;
 using IdleGame.Api.Host.Hubs;
+using AspNetCoreRateLimit;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = new ConfigurationBuilder()
@@ -57,6 +58,23 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 builder.Services.ConfigureMapping();
 builder.Services.ConfigureInjection();
 
+builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+// 1. add in-memory cache to store rate limit counters and ip rules
+builder.Services.AddMemoryCache();
+
+// 2. load general configuration from appsettings.json
+builder.Services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
+
+// 4. inject counter and rules stores
+builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+
+// 5. the clientId/clientIp resolvers use IHttpContextAccessor.
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+// 6. AspNetCoreRateLimit configuration (resolvers, counter key builders)
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
 var key = Encoding.UTF8.GetBytes("1234567753123456");
 
 builder.Services.AddAuthentication(x =>
@@ -92,6 +110,9 @@ app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IdleGame v1"));
 app.MapHub<ChatHub>("/hub");
 app.UseRouting();
+
+// 7. enable AspNetCoreRateLimit middleware
+app.UseIpRateLimiting();
 //app.UseHttpsRedirection();
 
 app.UseAuthentication();
