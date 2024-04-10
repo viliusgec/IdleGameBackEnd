@@ -88,7 +88,10 @@ namespace IdleGame.ApplicationServices.Services
         public async Task<MarketItemEntity> SellMarketItems(MarketItemDto item)
         {
             var playerItem = await _itemService.GetPlayerItem(item.Player, item.ItemName);
+            var playerMarketItems = await _itemService.GetPlayerMarketItems(item.Player);
             if (playerItem == null)
+                return null;
+            if (playerMarketItems.Count() > 5)
                 return null;
             playerItem.Amount -= item.Amount;
             _itemService.PutPlayerItem(playerItem);
