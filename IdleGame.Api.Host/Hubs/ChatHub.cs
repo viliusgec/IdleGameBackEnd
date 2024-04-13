@@ -19,7 +19,7 @@ namespace IdleGame.Api.Host.Hubs
             playerHealth[username] = 100; // Set initial health
 
             await Groups.AddToGroupAsync(Context.ConnectionId, lobbyId);
-            await Clients.Group(lobbyId).SendAsync("playerJoined", username);
+            await Clients.OthersInGroup(lobbyId).SendAsync("playerJoined", username);
         }
 
         public async Task createLobby(string username)
@@ -29,7 +29,7 @@ namespace IdleGame.Api.Host.Hubs
             // Make 2 players max
             playerHealth[username] = 100;
             playerLobbies[username] = lobbyId;
-            // Context.Items
+
             await Groups.AddToGroupAsync(Context.ConnectionId, lobbyId);
             await Clients.Others.SendAsync("newLobbyCreated", playerLobbies);
             await Clients.Caller.SendAsync("lobbyCreated", lobbyId);
@@ -44,41 +44,37 @@ namespace IdleGame.Api.Host.Hubs
         public async Task attack(string username)
         {
             string lobbyId = playerLobbies[username];
-            int opponentHealth = playerHealth[username];
 
             var random = new Random();
             int damage = random.Next(1, 10); // You can adjust the damage logic as needed
 
-            opponentHealth -= damage;
+            playerHealth[username] -= damage;
 
-            await Clients.Group(lobbyId).SendAsync("attackReceived", username, damage);
-            await Clients.Caller.SendAsync("attackCompleted", opponentHealth);
+            await Clients.OthersInGroup(lobbyId).SendAsync("attackReceived", playerHealth[username]);
+            await Clients.Caller.SendAsync("attackCompleted", playerHealth[username]);
 
-            playerHealth[username] = opponentHealth;
 
             // Check if the game is over (e.g., health <= 0)
-            if (opponentHealth <= 0)
+            if (playerHealth[username] <= 0)
             {
                 await Clients.Group(lobbyId).SendAsync("gameOver", Context.ConnectionId);
             }
         }
 
-        public async Task StartGameV2(string username, string lobbyId)
+        public async Task startGame(string username, string lobbyId)
         {
             await Clients.Group(lobbyId).SendAsync("gameStarted", username);
         }
 
-        public async Task newAttack(int hp)
+        public async Task heal(string username)
         {
-            var a = new Random();
-            hp = a.Next(0, hp);
-            await Clients.Others.SendAsync("attackRecieved", hp);
-            await Clients.Caller.SendAsync("attackCompleted", hp);
-        }
+            string lobbyId = playerLobbies[username];
+            double missingHP = (100 - playerHealth[username]);
+            int hpToAdd = (int)(missingHP * 0.8);
+            playerHealth[username] += hpToAdd;
 
-        public async Task startGame(string username)
-        {
-            await Clients.All.SendAsync("gameStarted", username);   
+            await Clients.OthersInGroup(lobbyId).SendAsync("enemyHealed", playerHealth[username]);
+            await Clients.Caller.SendAsync("healingCompleted", playerHealth[username]);
         }
     }
 }
