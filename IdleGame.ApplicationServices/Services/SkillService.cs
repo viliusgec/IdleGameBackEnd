@@ -63,14 +63,23 @@ namespace IdleGame.ApplicationServices.Services
                 playerItem.Amount += trainingSkill.GivenItemAmount ?? 1;
                 _itemRetrievalService.PutPlayerItem(playerItem);
             }
+            var playerStatus = (await _skillService.GetPlayerStatistics(username)).FirstOrDefault(x => x.TrainingName.Equals(trainingSkill.TrainingName));
+            if (playerStatus != null)
+            {
+                playerStatus.Count++;
+                _skillService.PutPlayerStatistics(playerStatus);
+            }
+
             return _skillService.PutUserSkill(userSkill, trainingSkill);
         }
 
         public async Task<PlayerAchievementsEntity> CollectPlayerAchievement(int achievementId, string username)
         {
-            var achievement = (await _skillService.GetPlayerAchievements(username)).First(x => x.Achievement.Id == achievementId);
-            var playerSkill = await _skillService.GetUserSkill(achievement.Achievement.SkillType, username);
-            if (achievement.Achievement.RequiredXP > playerSkill.Experience)
+            var achievement = (await _skillService.GetPlayerAchievements(username)).First(x => x.Achievement.Id == achievementId); 
+            var playerStats = (await _skillService.GetPlayerStatistics(username)).First(x => x.TrainingName.Equals(achievement.Achievement.TrainingName));
+            var trainingSkill = await _skillService.GetTrainingSkill(achievement.Achievement.TrainingName);
+            var playerSkill = await _skillService.GetUserSkill(trainingSkill.SkillType, username);
+            if (achievement.Achievement.RequiredCount > playerStats.Count)
                 return null;
             if (achievement.Achieved)
                 return null;
@@ -81,9 +90,19 @@ namespace IdleGame.ApplicationServices.Services
             return achievement;
         }
 
-        public Task<IEnumerable<PlayerAchievementsEntity>> GetPlayerAchievements(string username)
+        public async Task<IEnumerable<PlayerAchievementsEntity>> GetPlayerAchievements(string username)
         {
-            return _skillService.GetPlayerAchievements(username);
+            var playerAchievements = await _skillService.GetPlayerAchievements(username);
+            var playerStatistics = await _skillService.GetPlayerStatistics(username);
+            // Fill achievements data with statistics progress
+
+            foreach (var achievement in playerAchievements)
+            {
+                // Find corresponding statistic for the player
+                achievement.Count = playerStatistics.FirstOrDefault(s => s.TrainingName == achievement.Achievement.TrainingName)?.Count ?? 0;
+            }
+
+            return playerAchievements;
         }
 
         // Call what ever u want
@@ -112,7 +131,7 @@ namespace IdleGame.ApplicationServices.Services
             playerSkill.Experience += ((int)diff * training.IdleTraining.XpGiven);
             _skillService.PutUserSkill(playerSkill); 
             training.Active = false;
-            //await _skillService.PutPlayerIdleTraining(training);
+            await _skillService.PutPlayerIdleTraining(training);
             return training;
         }
 

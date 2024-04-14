@@ -26,6 +26,8 @@ namespace IdleGame.Infrastructure.Mapping
             CreateMap<BattleModel, BattleEntity>().ReverseMap();
             CreateMap<MarketItemEntity, MarketItemDto>().ReverseMap();
             CreateMap<MarketItemModel, MarketItemEntity>().ReverseMap();
+            CreateMap<PlayerStatisticsEntity, PlayerStatisticsDto>().ReverseMap();
+            CreateMap<PlayerStatisticsModel, PlayerStatisticsEntity>().ReverseMap();
             CreateMap<PlayerItemEntity, PlayerItemDto>()
                 .ForMember(destination => destination.ItemName, opts => opts.MapFrom(source => source.Item.Name))
                 .ForMember(destination => destination.Level, opts => opts.MapFrom(source => source.Item.Level))
@@ -35,8 +37,8 @@ namespace IdleGame.Infrastructure.Mapping
             CreateMap<PlayerItemEntity, PlayerItemModel>()
                 .ForMember(destination => destination.ItemName, opts => opts.MapFrom(source => source.Item.Name));
             CreateMap<PlayerAchievementsEntity, PlayerAchievementsDto>()
-                .ForMember(destination => destination.SkillType, opts => opts.MapFrom(source => source.Achievement.SkillType))
-                .ForMember(destination => destination.RequiredXP, opts => opts.MapFrom(source => source.Achievement.RequiredXP))
+                .ForMember(destination => destination.TrainingName, opts => opts.MapFrom(source => source.Achievement.TrainingName))
+                .ForMember(destination => destination.RequiredCount, opts => opts.MapFrom(source => source.Achievement.RequiredCount))
                 .ForMember(destination => destination.Reward, opts => opts.MapFrom(source => source.Achievement.Reward))
                 .ForMember(destination => destination.Description, opts => opts.MapFrom(source => source.Achievement.Description));
             CreateMap<PlayerAchievementsEntity, PlayerAchievementsModel>()

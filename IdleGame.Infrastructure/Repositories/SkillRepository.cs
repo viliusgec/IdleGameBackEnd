@@ -110,7 +110,7 @@ namespace IdleGame.Infrastructure.Repositories
                     }
                 ).ToListAsync();
         }
-        
+
         public async Task<IEnumerable<AchievementsEntity>> GetAchievements()
         {
             var achievements = await _context.Achievements.ToListAsync();
@@ -122,11 +122,11 @@ namespace IdleGame.Infrastructure.Repositories
             var trainings = await _context.IdleTraining.ToListAsync();
             return _mappingService.Map<IEnumerable<IdleTrainingEntity>>(trainings);
         }
-        
+
         public async Task<PlayerIdleTrainingEntity> GetPlayerIdleTraining(string username)
         {
             var training = await _context.PlayerIdleTrainings.AsNoTracking().Where(x => x.PlayerUsername.Equals(username))
-                .Join(_context.IdleTraining, 
+                .Join(_context.IdleTraining,
                     playerIdleTraining => playerIdleTraining.IdleTrainingId,
                     idleTraining => idleTraining.Id,
                     (playerIdleTraining, idleTraining) => new PlayerIdleTrainingEntity
@@ -146,12 +146,11 @@ namespace IdleGame.Infrastructure.Repositories
             try
             {
                 var b = _context.Entry(_mappingService.Map<PlayerIdleTrainingModel>(training));
-                if(b.State != EntityState.Modified)
+                if (b.State != EntityState.Modified)
                 {
                     _context.Entry(_mappingService.Map<PlayerIdleTrainingModel>(training)).State = EntityState.Modified;
                 }
-                
-                var a = 1;
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -181,5 +180,39 @@ namespace IdleGame.Infrastructure.Repositories
             return _mappingService.Map<IEnumerable<SkillEntity>>(players);
         }
 
+        public async Task<IEnumerable<PlayerStatisticsEntity>> GetPlayerStatistics(string playerUsername)
+        {
+            var playerStatistics = await _context.PlayerStatistics.Where(x => x.PlayerUsername.Equals(playerUsername)).ToListAsync();
+            return _mappingService.Map<IEnumerable<PlayerStatisticsEntity>>(playerStatistics);
+        }
+
+        public async Task<PlayerStatisticsEntity> PostPlayerStatistic(PlayerStatisticsEntity statistic)
+        {
+            await _context.PlayerStatistics.AddAsync(_mappingService.Map<PlayerStatisticsModel>(statistic));
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+            return statistic;
+        }
+
+        public PlayerStatisticsEntity PutPlayerStatistics(PlayerStatisticsEntity statistic)
+        {
+            _context.Entry(_mappingService.Map<PlayerStatisticsModel>(statistic)).State = EntityState.Modified;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return statistic;
+
+        }
     }
 }

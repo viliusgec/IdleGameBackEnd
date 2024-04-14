@@ -88,5 +88,20 @@ namespace IdleGame.Domain.Services
         {
             return _skillRepository.GetLeadersBySkill(skillName, leadersCount);
         }
+
+        public PlayerStatisticsEntity PutPlayerStatistics(PlayerStatisticsEntity statistic)
+        {
+            return _skillRepository.PutPlayerStatistics(statistic);
+        }
+
+        public Task<PlayerStatisticsEntity> PostPlayerStatistic(PlayerStatisticsEntity statistic)
+        {
+            return _skillRepository.PostPlayerStatistic(statistic);
+        }
+
+        public Task<IEnumerable<PlayerStatisticsEntity>> GetPlayerStatistics(string playerUsername)
+        {
+            return _skillRepository.GetPlayerStatistics(playerUsername);
+        }
     }
 }

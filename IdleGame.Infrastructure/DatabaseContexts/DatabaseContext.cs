@@ -26,5 +26,6 @@ namespace IdleGame.Infrastructure.DatabaseContext
         public DbSet<PlayerIdleTrainingModel> PlayerIdleTrainings { get; set; }
         public DbSet<EquippedItemsModel> EquippedItems { get; set; }
         public DbSet<PvPModel> PvP { get; set; }
+        public DbSet<PlayerStatisticsModel> PlayerStatistics { get; set; }
     }
 }

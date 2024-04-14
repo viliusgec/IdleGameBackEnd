@@ -19,5 +19,8 @@ namespace IdleGame.Domain.Repositories
         public Task<PlayerIdleTrainingEntity> PutPlayerIdleTraining(PlayerIdleTrainingEntity training);
         public Task<PlayerIdleTrainingEntity> PostPlayerIdleTraining(PlayerIdleTrainingEntity training);
         public Task<IEnumerable<SkillEntity>> GetLeadersBySkill(string skillName, int? leadersCount);
+        public PlayerStatisticsEntity PutPlayerStatistics(PlayerStatisticsEntity statistic);
+        public Task<PlayerStatisticsEntity> PostPlayerStatistic(PlayerStatisticsEntity statistic);
+        public Task<IEnumerable<PlayerStatisticsEntity>> GetPlayerStatistics(string playerUsername);
     }
 }
