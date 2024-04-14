@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_7fb98d5eaac04045a70ff8ea61c5d79d }}/backend:${{ github.sha }}
-        file: ./Dockerfile
+        file: ./IdleGame.Api.Host/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
