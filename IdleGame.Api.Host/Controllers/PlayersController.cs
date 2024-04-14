@@ -29,7 +29,7 @@ namespace IdleGame.Api.Host.Controllers
         }
 
         [HttpPatch]
-        [Route("PatchPlayerInfo")]
+        [Route("Admin/PatchPlayerInfo")]
         [Authorize(Roles = "Admin")]
         public ActionResult<IEnumerable<PlayerItemDto>> PatchPlayerInfo()
         {
@@ -38,7 +38,7 @@ namespace IdleGame.Api.Host.Controllers
         }
 
         [HttpPatch]
-        [Route("PatchUserInfo")]
+        [Route("Admin/PatchUserInfo")]
         [Authorize(Roles = "Admin")]
         public ActionResult<IEnumerable<PlayerItemDto>> PatchUserInfo()
         {

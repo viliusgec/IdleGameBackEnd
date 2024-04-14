@@ -16,6 +16,7 @@ namespace IdleGame.Api.Host.Capabilities
             services.AddScoped<IPlayerRetrievalService, PlayerRetrievalService>();
             services.AddScoped<IItemRetrievalService, ItemRetrievalService>();
             services.AddScoped<IBattleRetrievalService, BattleRetrievalService>();
+            services.AddScoped<IPvPRetrievalService, PvPRetrievalService>();
 
             // Inject Application Services
             services.AddScoped<IUserService, UserService>();
@@ -23,12 +24,14 @@ namespace IdleGame.Api.Host.Capabilities
             services.AddScoped<ISkillService, SkillService>();
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IBattleService, BattleService>();
+            services.AddScoped<IPvPService, PvPService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<IBattlesRepository, BattlesRepository>();
+            services.AddScoped<IPvPRepository, PvPRepository>();
             return services;
         }
     }

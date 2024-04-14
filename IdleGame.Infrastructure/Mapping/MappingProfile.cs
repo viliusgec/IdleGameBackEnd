@@ -57,6 +57,8 @@ namespace IdleGame.Infrastructure.Mapping
             CreateMap<AchievementsEntity, AchievementsModel>().ReverseMap();
             CreateMap<IdleTrainingEntity, IdleTrainingModel>().ReverseMap();
             CreateMap<IdleTrainingDto, IdleTrainingEntity>().ReverseMap();
+            CreateMap<PvPEntity, PvPModel>().ReverseMap();
+            CreateMap<PvPDto, PvPEntity>().ReverseMap();
             CreateMap<PlayerIdleTrainingDto, PlayerIdleTrainingEntity>().ReverseMap();
             CreateMap<PlayerIdleTrainingModel, PlayerIdleTrainingEntity>()
                .ForPath(destinition => destinition.IdleTraining.Id, opts => opts.MapFrom(source => source.IdleTrainingId));
