@@ -14,7 +14,7 @@ namespace IdleGame.ApplicationServices.Services
         private readonly IPlayerRetrievalService _playerService;
         private readonly ISkillRetrievalService _skillService;
         private readonly IMappingRetrievalService _mappingService;
-        private readonly string[] _skills = {"Woodcutting", "Firemaking", "Fishing", "Cooking", "Mining"};
+        private readonly string[] _skills = {"Woodcutting", "Firemaking", "Fishing", "Cooking", "Mining", "Smithing" };
         public UserService(IUserRetrievalService usersService, IPlayerRetrievalService playerService, ISkillRetrievalService skillService, IMappingRetrievalService mappingService)
         {
             _usersService = usersService;
