@@ -15,11 +15,11 @@ namespace IdleGame.ApplicationServices.Services
         private readonly IPlayerRetrievalService _playerService;
         private readonly IBattleRetrievalService _battleService;
         private readonly IMappingRetrievalService _mappingService;
-        public BattleService(IItemRetrievalService itemService, IBattleRetrievalService battleService,  IPlayerRetrievalService playerService, IMappingRetrievalService mappingService)
+        public BattleService(IItemRetrievalService itemService, IBattleRetrievalService battleService)
         {
             _itemService = itemService;
-            _mappingService = mappingService;
-            _playerService = playerService;
+          //  _mappingService = mappingService;
+         //   _playerService = playerService;
             _battleService = battleService;
         }
         public Task<IEnumerable<ItemEntity>> GetItems()
