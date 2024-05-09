@@ -72,7 +72,7 @@ namespace IdleGame.Api.Host.Hubs
             string lobbyId = playerLobbies[username];
 
             var random = new Random();
-            int damage = random.Next(1, 10); // You can adjust the damage logic as needed
+            int damage = random.Next(1, 20); // You can adjust the damage logic as needed
 
             playerHealth[username] -= damage;
 

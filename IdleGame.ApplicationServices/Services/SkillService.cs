@@ -75,7 +75,7 @@ namespace IdleGame.ApplicationServices.Services
 
         public async Task<PlayerAchievementsEntity> CollectPlayerAchievement(int achievementId, string username)
         {
-            var achievement = (await _skillService.GetPlayerAchievements(username)).First(x => x.Achievement.Id == achievementId); 
+            var achievement = (await _skillService.GetPlayerAchievements(username)).First(x => x.Id == achievementId); 
             var playerStats = (await _skillService.GetPlayerStatistics(username)).First(x => x.TrainingName.Equals(achievement.Achievement.TrainingName));
             var trainingSkill = await _skillService.GetTrainingSkill(achievement.Achievement.TrainingName);
             var playerSkill = await _skillService.GetUserSkill(trainingSkill.SkillType, username);
