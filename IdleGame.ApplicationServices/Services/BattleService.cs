@@ -1,32 +1,22 @@
 ﻿using IdleGame.Domain.Entities;
 using IdleGame.Domain.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace IdleGame.ApplicationServices.Services
 {
     public class BattleService : IBattleService
     {
         private readonly IItemRetrievalService _itemService;
-        private readonly IPlayerRetrievalService _playerService;
         private readonly IBattleRetrievalService _battleService;
-        private readonly IMappingRetrievalService _mappingService;
         public BattleService(IItemRetrievalService itemService, IBattleRetrievalService battleService)
         {
             _itemService = itemService;
-          //  _mappingService = mappingService;
-         //   _playerService = playerService;
             _battleService = battleService;
         }
-        public Task<IEnumerable<ItemEntity>> GetItems()
+/*        public Task<IEnumerable<ItemEntity>> GetItems()
         {
             return _itemService.GetItems();
         }
-        
+        */
         public async Task<BattleEntity> ContinueBattle(string playerName, BattleEntity startedBattle)
         {
             var battle = await _battleService.GetBattle(startedBattle.ID);

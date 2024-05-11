@@ -105,13 +105,11 @@ namespace IdleGame.ApplicationServices.Services
             return playerAchievements;
         }
 
-        // Call what ever u want
         public async Task<PlayerIdleTrainingEntity> StartIdleTraining(int id, string username)
         {
             var training = await _skillService.GetPlayerIdleTraining(username);
             if (training.Active)
                 await StopIdleTrainingAction(username);
-            //get training and check if player can start it
             training.IdleTraining.Id = id;
             training.StartTime = DateTime.UtcNow;
             training.Active = true;

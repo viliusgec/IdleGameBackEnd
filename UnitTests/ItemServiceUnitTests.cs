@@ -1,5 +1,6 @@
 ﻿using IdleGame.ApplicationServices.Services;
 using IdleGame.Domain.Services;
+using IdleGame.Domain.Entities;
 using Moq;
 
 namespace UnitTests
