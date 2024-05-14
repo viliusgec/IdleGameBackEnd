@@ -10,7 +10,6 @@ namespace UnitTests
         private readonly BattleService battleService;
         private readonly Mock<IBattleRetrievalService> _battleServiceMock;
         private readonly Mock<IItemRetrievalService> _itemServiceMock;
-        private readonly Mock<Random> _randomMock;
         private readonly List<MonsterEntity> mockMonsters =
             [
                 new() { Attack = 5, Defense = 0, DroppedItem = "coal", HP = 20, ItemDropChance = 101, Level = 1, Name = "Goblin", XpGiven = 0 },

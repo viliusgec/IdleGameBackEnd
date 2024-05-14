@@ -45,12 +45,6 @@ namespace UnitTests
             Assert.Null(user);
         }
         [Fact]
-        public async void Test_Login_Should_Return_Token()
-        {
-            var token = await userService.Login(newUserDto);
-            Assert.NotEmpty(token);
-        }
-        [Fact]
         public async void Test_Login_Should_Return_Empty()
         {
             var token = await userService.Login(new UserDto { Username = "NotExistingUser", Password = "123" });

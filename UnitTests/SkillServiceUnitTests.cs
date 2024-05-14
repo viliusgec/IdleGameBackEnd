@@ -10,7 +10,6 @@ namespace UnitTests
         private readonly SkillService skillService;
         private readonly Mock<ISkillRetrievalService> _skillServiceMock;
         private readonly Mock<IItemRetrievalService> _itemServiceMock;
-        private readonly Mock<IMappingRetrievalService> _mapRetrievalServiceMock;
 
         private readonly SkillEntity userSkill = new() { Name = "TestSkill", Experience = 100, Id = 0, PlayerUsername = "TestPlayer" };
         private readonly TrainingSkillEntity trainingSkill = new() { SkillType = "TestSkill", SkillLevelRequired = 10, GivenItem = "TestItem", XpGiven = 10, NeededItem = "NeededTestItem", NeededItemAmount = 1, TrainingName = "TestTraining" };
@@ -24,8 +23,7 @@ namespace UnitTests
         {
             _skillServiceMock = new Mock<ISkillRetrievalService>();
             _itemServiceMock = new Mock<IItemRetrievalService>();
-            _mapRetrievalServiceMock = new Mock<IMappingRetrievalService>();
-            skillService = new SkillService(_skillServiceMock.Object, _itemServiceMock.Object, _mapRetrievalServiceMock.Object);
+            skillService = new SkillService(_skillServiceMock.Object, _itemServiceMock.Object);
 
             _skillServiceMock.Setup(x => x.GetTrainingSkill("TestTraining")).Returns(Task.FromResult(trainingSkill));
             _skillServiceMock.Setup(x => x.GetUserSkill("TestSkill", "TestPlayer")).Returns(Task.FromResult(userSkill));
