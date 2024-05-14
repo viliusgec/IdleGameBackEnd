@@ -3,13 +3,10 @@ using IdleGame.Domain.Repositories;
 
 namespace IdleGame.Domain.Services
 {
-    public class ItemRetrievalService : IItemRetrievalService
+    public class ItemRetrievalService(IItemRepository itemRepository) : IItemRetrievalService
     {
-        private readonly IItemRepository _itemRepository;
-        public ItemRetrievalService(IItemRepository itemRepository)
-        {
-            _itemRepository = itemRepository;
-        }
+        private readonly IItemRepository _itemRepository = itemRepository;
+
         public Task<IEnumerable<ItemEntity>> GetItems()
         {
             return _itemRepository.GetItems();

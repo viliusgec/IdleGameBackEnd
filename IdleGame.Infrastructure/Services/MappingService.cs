@@ -3,13 +3,9 @@ using IdleGame.Domain.Services;
 
 namespace IdleGame.Infrastructure.Services
 {
-    public class MappingService : IMappingRetrievalService
+    public class MappingService(IMapper mapper) : IMappingRetrievalService
     {
-        private readonly IMapper _mapper;
-        public MappingService(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
+        private readonly IMapper _mapper = mapper;
 
         public TDestination Map<TDestination>(object source)
         {

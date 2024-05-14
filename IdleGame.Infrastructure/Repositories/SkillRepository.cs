@@ -6,15 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdleGame.Infrastructure.Repositories
 {
-    public class SkillRepository : ISkillRepository
+    public class SkillRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService) : ISkillRepository
     {
-        private readonly DatabaseContext.DatabaseContext _context;
-        private readonly IMappingRetrievalService _mappingService;
-        public SkillRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService)
-        {
-            _context = context;
-            _mappingService = mappingService;
-        }
+        private readonly DatabaseContext.DatabaseContext _context = context;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
 
         public async Task<IEnumerable<SkillEntity>> GetSkills(string username)
         {
@@ -212,7 +207,6 @@ namespace IdleGame.Infrastructure.Repositories
                 throw;
             }
             return statistic;
-
         }
     }
 }

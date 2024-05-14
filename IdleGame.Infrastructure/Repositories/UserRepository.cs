@@ -6,15 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdleGame.Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService) : IUserRepository
     {
-        private readonly DatabaseContext.DatabaseContext _context;
-        private readonly IMappingRetrievalService _mappingService;
-        public UserRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService)
-        {
-            _context = context;
-            _mappingService = mappingService;
-        }
+        private readonly DatabaseContext.DatabaseContext _context = context;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
+
         public async Task<UserEntity> GetUser(string username)
         {
             var player = await _context.Users.FindAsync(username);

@@ -2,7 +2,6 @@
 using IdleGame.Api.Contracts;
 using IdleGame.Domain.Entities;
 using IdleGame.Infrastructure.Models;
-using System.ComponentModel;
 
 namespace IdleGame.Infrastructure.Mapping
 {

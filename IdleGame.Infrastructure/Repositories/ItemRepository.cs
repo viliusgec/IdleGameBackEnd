@@ -6,15 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdleGame.Infrastructure.Repositories
 {
-    public  class ItemRepository : IItemRepository
+    public  class ItemRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService) : IItemRepository
     {
-        private readonly DatabaseContext.DatabaseContext _context;
-        private readonly IMappingRetrievalService _mappingService;
-        public ItemRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService)
-        {
-            _context = context;
-            _mappingService = mappingService;
-        }
+        private readonly DatabaseContext.DatabaseContext _context = context;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
 
         public async Task<IEnumerable<ItemEntity>> GetItems()
         {

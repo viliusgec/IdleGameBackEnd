@@ -3,13 +3,10 @@ using IdleGame.Domain.Repositories;
 
 namespace IdleGame.Domain.Services
 {
-    public class UserRetrievalService : IUserRetrievalService
+    public class UserRetrievalService(IUserRepository userRepository) : IUserRetrievalService
     {
-        private readonly IUserRepository _userRepository;
-        public UserRetrievalService(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
+        private readonly IUserRepository _userRepository = userRepository;
+
         public Task<UserEntity> GetUser(string username)
         {
             return _userRepository.GetUser(username);

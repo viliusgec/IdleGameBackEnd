@@ -3,13 +3,10 @@ using IdleGame.Domain.Repositories;
 
 namespace IdleGame.Domain.Services
 {
-    public class BattleRetrievalService : IBattleRetrievalService
+    public class BattleRetrievalService(IBattlesRepository battleRepository) : IBattleRetrievalService
     {
-        private readonly IBattlesRepository _battleRepository;
-        public BattleRetrievalService(IBattlesRepository battleRepository)
-        {
-            _battleRepository = battleRepository;
-        }
+        private readonly IBattlesRepository _battleRepository = battleRepository;
+
         public Task<BattleEntity> GetBattle(int id)
         {
             return _battleRepository.GetBattle(id);

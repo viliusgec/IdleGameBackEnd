@@ -91,7 +91,7 @@ namespace IdleGame.ApplicationServices.Services
             var playerMarketItems = await _itemService.GetPlayerMarketItems(item.Player);
             if (playerItem == null)
                 return null;
-            if (playerMarketItems.Count() > 5)
+            if (playerMarketItems.Count() >= 5)
                 return null;
             playerItem.Amount -= item.Amount;
             _itemService.PutPlayerItem(playerItem);
@@ -101,13 +101,11 @@ namespace IdleGame.ApplicationServices.Services
         public async Task<MarketItemEntity> BuyMarketItems(string username, MarketItemDto item)
         {
             var player = await _playerService.GetPlayer(username);
-            // Parasyt normalu repository metoda kad gaut item pagal id
             var marketItem = (await _itemService.GetPlayerMarketItems(item.Player)).FirstOrDefault(x => x.ItemName.Equals(item.ItemName));
             if (marketItem == null)
                 return null;
             if (player.Money < marketItem.Price * item.Amount || marketItem.Amount < item.Amount || marketItem.ItemName.Equals(username))
                 return null;
-            // Maybe sell all items for marketItem.Price? 
             player.Money -= (marketItem.Price * item.Amount);
             _playerService.UpdatePlayer(player);
             var playerItem = await _itemService.GetPlayerItem(username, item.ItemName);
@@ -141,7 +139,6 @@ namespace IdleGame.ApplicationServices.Services
         public async Task<MarketItemEntity> CancelMarketListing(string username, MarketItemDto item)
         {
             var player = await _playerService.GetPlayer(username);
-            // Parasyt normalu repository metoda kad gaut item pagal id
             var marketItem = (await _itemService.GetPlayerMarketItems(item.Player)).FirstOrDefault(x => x.ItemName.Equals(item.ItemName));
             if (marketItem == null)
                 return null;
@@ -178,9 +175,7 @@ namespace IdleGame.ApplicationServices.Services
             return await _itemService.GetPlayerEquippedItem(username, itemType);
         }
         public async Task<EquippedItemsEntity> EquipItem(string username, string itemName)
-        {
-            // Should get player item instead
-            // [TODO]: Add validation if player can equip the item (if xp count meets requirements) 
+        { 
             var item = (await _itemService.GetItems()).FirstOrDefault(x => x.Name.Equals(itemName));
             if (item == null)
                 return null;
@@ -197,10 +192,5 @@ namespace IdleGame.ApplicationServices.Services
             equippedItem.Item = null;
             return _itemService.PutEquippedItem(equippedItem);
         }
-
-        /* public async Task<EquippedItemsEntity> PostEquippedItem(EquippedItemsEntity item)
-        {
-         Create logic to add equipped item rows to db for new accounts
-        } */
     }
 }

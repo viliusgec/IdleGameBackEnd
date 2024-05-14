@@ -3,13 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdleGame.Infrastructure.DatabaseContext
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-        {
-
-        }
-
         public DbSet<UserModel> Users { get; set; }
         public DbSet<PlayerModel> Players { get; set; }
         public DbSet<PlayerItemModel> PlayerItems { get; set; }

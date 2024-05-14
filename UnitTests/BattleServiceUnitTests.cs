@@ -2,9 +2,6 @@
 using IdleGame.Domain.Entities;
 using IdleGame.Domain.Services;
 using Moq;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Threading;
 
 namespace UnitTests
 {
@@ -108,7 +105,7 @@ namespace UnitTests
         }
         
         [Fact]
-        public async void Test_ContinueBattle_Should_Return_BattleEned_If_MonsterPlayerHPZeroAfterAttack()
+        public async void Test_ContinueBattle_Should_Return_BattleEnd_If_PlayerHPZeroAfterAttack()
         {
             mockBattle.PlayerHP = 1;
             _battleServiceMock.Setup(x => x.GetBattle(0)).Returns(Task.FromResult(mockBattle));
@@ -133,8 +130,8 @@ namespace UnitTests
         {
             mockBattle.MonsterHP = 1;
             _battleServiceMock.Setup(x => x.GetBattle(0)).Returns(Task.FromResult(mockBattle));
-            var battle = await battleService.ContinueBattle("TestPlayer", mockBattle);
             _itemServiceMock.Setup(x => x.GetPlayerItem("TestPlayer", "coal")).Returns(Task.FromResult<PlayerItemEntity>(null));
+            var battle = await battleService.ContinueBattle("TestPlayer", mockBattle);
             Assert.True(battle.BattleFinished);
             Assert.True(battle.ItemGiven);
             Assert.True(battle.MonsterHP <= 0);

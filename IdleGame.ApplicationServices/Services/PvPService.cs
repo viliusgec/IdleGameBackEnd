@@ -1,26 +1,15 @@
 ﻿using IdleGame.Api.Contracts;
 using IdleGame.Domain.Entities;
 using IdleGame.Domain.Services;
-using IdleGame.Infrastructure.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IdleGame.ApplicationServices.Services
 {
-    public class PvPService : IPvPService
+    public class PvPService(IPvPRetrievalService pvPRetrievalService, IMappingRetrievalService mappingService, IPlayerRetrievalService playerService) : IPvPService
     {
-        private readonly IPvPRetrievalService _PvPRetrievalService;
-        private readonly IPlayerRetrievalService _playerService;
-        private readonly IMappingRetrievalService _mappingService;
-        public PvPService(IPvPRetrievalService pvPRetrievalService, IMappingRetrievalService mappingService, IPlayerRetrievalService playerService)
-        {
-            _PvPRetrievalService = pvPRetrievalService;
-            _mappingService = mappingService;
-            _playerService = playerService;
-        }
+        private readonly IPvPRetrievalService _PvPRetrievalService = pvPRetrievalService;
+        private readonly IPlayerRetrievalService _playerService = playerService;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
+
         public async Task<PvPEntity> CreatePvP(PvPDto pvp)
         {
             return await _PvPRetrievalService.CreatePvP(_mappingService.Map<PvPEntity>(pvp));

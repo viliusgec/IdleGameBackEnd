@@ -8,16 +8,10 @@ namespace IdleGame.Api.Host.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PlayersController : ControllerBase
+    public class PlayersController(IPlayerService playerService, IMappingRetrievalService mappingService) : ControllerBase
     {
-        private readonly IPlayerService _playerService;
-        private readonly IMappingRetrievalService _mappingService;
-
-        public PlayersController(IPlayerService playerService, IMappingRetrievalService mappingService)
-        {
-            _playerService = playerService;
-            _mappingService = mappingService;
-        }
+        private readonly IPlayerService _playerService = playerService;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
 
         [HttpGet]
         [Authorize]
@@ -26,24 +20,6 @@ namespace IdleGame.Api.Host.Controllers
             string username = User.Claims.First(c => c.Type == "Username").Value;
             var result = await _playerService.GetPlayer(username);
             return Ok(_mappingService.Map<PlayerDto>(result));
-        }
-
-        [HttpPatch]
-        [Route("Admin/PatchPlayerInfo")]
-        [Authorize(Roles = "Admin")]
-        public ActionResult<IEnumerable<PlayerItemDto>> PatchPlayerInfo()
-        {
-            // Add patch/put functionality to edit
-            return Ok();
-        }
-
-        [HttpPatch]
-        [Route("Admin/PatchUserInfo")]
-        [Authorize(Roles = "Admin")]
-        public ActionResult<IEnumerable<PlayerItemDto>> PatchUserInfo()
-        {
-            // Add patch/put functionality to edit
-            return Ok();
         }
     }
 }

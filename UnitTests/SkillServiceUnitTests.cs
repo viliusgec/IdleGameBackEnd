@@ -190,6 +190,20 @@ namespace UnitTests
             Assert.NotNull(result);
         }
         [Fact]
+        public async void Test_StopIdleTraining_Should_Return_IdleTraining()
+        {
+            var result = await skillService.StopIdleTraining("TestPlayer");
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async void Test_StopIdleTraining_Should_Return_IdleTraining_When_Active()
+        {
+            playerIdleTraining.Active = false;
+            _skillServiceMock.Setup(x => x.GetPlayerIdleTraining("TestPlayer")).Returns(Task.FromResult(playerIdleTraining));
+            var result = await skillService.StopIdleTraining("TestPlayer");
+            Assert.False(result.Active);
+        }
+        [Fact]
         public async void Test_GetLeadersBySkill_Should_Return_Leaders()
         {
             var leaders = new List<SkillEntity> { userSkill };

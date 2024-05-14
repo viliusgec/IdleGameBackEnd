@@ -4,17 +4,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace IdleGame.ApplicationServices.Services
 {
-    public class SkillService : ISkillService
+    public class SkillService(ISkillRetrievalService skillService, IItemRetrievalService itemRetrievalService) : ISkillService
     {
-        private readonly ISkillRetrievalService _skillService;
-        private readonly IItemRetrievalService _itemRetrievalService;
-        private readonly IMappingRetrievalService _mappingService;
-        public SkillService(ISkillRetrievalService skillService, IItemRetrievalService itemRetrievalService, IMappingRetrievalService mappingService)
-        {
-            _skillService = skillService;
-            _mappingService = mappingService;
-            _itemRetrievalService = itemRetrievalService;
-        }
+        private readonly ISkillRetrievalService _skillService = skillService;
+        private readonly IItemRetrievalService _itemRetrievalService = itemRetrievalService;
+
         public Task<IEnumerable<SkillEntity>> GetSkills(string username)
         {
             return _skillService.GetSkills(username);
@@ -31,8 +25,6 @@ namespace IdleGame.ApplicationServices.Services
             var userSkill = await _skillService.GetUserSkill(trainingSkill.SkillType, username);
             if (userSkill.Experience < trainingSkill.SkillLevelRequired * 10)
                 return null;
-            // add needed item validation
-
             if (!trainingSkill.NeededItem.IsNullOrEmpty())
             {
                 var neededPlayerItem = await _itemRetrievalService.GetPlayerItem(username, trainingSkill.NeededItem);
@@ -94,11 +86,9 @@ namespace IdleGame.ApplicationServices.Services
         {
             var playerAchievements = await _skillService.GetPlayerAchievements(username);
             var playerStatistics = await _skillService.GetPlayerStatistics(username);
-            // Fill achievements data with statistics progress
 
             foreach (var achievement in playerAchievements)
             {
-                // Find corresponding statistic for the player
                 achievement.Count = playerStatistics.FirstOrDefault(s => s.TrainingName == achievement.Achievement.TrainingName)?.Count ?? 0;
             }
 

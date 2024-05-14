@@ -9,31 +9,29 @@ namespace IdleGame.Api.Host.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemsController : ControllerBase
+    public class ItemsController(IItemService itemService, IMappingRetrievalService mappingService) : ControllerBase
     {
-        private readonly IItemService _itemService;
-        private readonly IMappingRetrievalService _mappingService;
-
-        public ItemsController(IItemService itemService, IMappingRetrievalService mappingService)
-        {
-            _itemService = itemService;
-            _mappingService = mappingService;
-        }
+        private readonly IItemService _itemService = itemService;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
 
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<IEnumerable<ItemDto>>> GetItem()
         {
             var result = await _itemService.GetItems();
+            if (result == null)
+                return BadRequest();
             return Ok(_mappingService.Map< IEnumerable<ItemDto>>(result));
         }
 
         [HttpGet]
         [Route("ShopItems")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ItemDto>>> GetShopItem()
         {
             var result = await _itemService.GetShopItems();
+            if (result == null)
+                return BadRequest();
             return Ok(_mappingService.Map<IEnumerable<ItemDto>>(result));
         }
 
@@ -44,6 +42,8 @@ namespace IdleGame.Api.Host.Controllers
         {
             string username = User.Claims.First(c => c.Type == "Username").Value;
             var result = await _itemService.GetPlayerItems(username);
+            if (result == null)
+                return BadRequest();
             return Ok(_mappingService.Map<IEnumerable<PlayerItemDto>>(result));
         }
 
@@ -54,6 +54,8 @@ namespace IdleGame.Api.Host.Controllers
         {
             string username = User.Claims.First(c => c.Type == "Username").Value;
             var result = await _itemService.SellPlayerItems(username, playerItem, sellAmount);
+            if (result == null)
+                return BadRequest();
             return Ok(_mappingService.Map<PlayerItemDto>(result));
         }
 
@@ -113,6 +115,8 @@ namespace IdleGame.Api.Host.Controllers
         {
             string username = User.Claims.First(c => c.Type == "Username").Value;
             var result = (await _itemService.GetMarketItems()).Where(x => !x.Player.Equals(username));
+            if (result == null)
+                return BadRequest();
             return Ok(_mappingService.Map<IEnumerable<MarketItemDto>>(result));
         }
 
@@ -123,6 +127,8 @@ namespace IdleGame.Api.Host.Controllers
         {
             string username = User.Claims.First(c => c.Type == "Username").Value;
             var result = await _itemService.GetPlayerMarketItems(username);
+            if (result == null)
+                return BadRequest();
             return Ok(_mappingService.Map<IEnumerable<MarketItemDto>>(result));
         }
 
@@ -133,6 +139,8 @@ namespace IdleGame.Api.Host.Controllers
         {
             string username = User.Claims.First(c => c.Type == "Username").Value;
             var result = await _itemService.GetPlayerEquippedItems(username);
+            if (result == null)
+                return BadRequest();
             return Ok(_mappingService.Map<IEnumerable<EquippedItemsDto>>(result));
         }
 

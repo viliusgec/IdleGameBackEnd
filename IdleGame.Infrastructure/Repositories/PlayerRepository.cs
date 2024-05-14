@@ -6,15 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdleGame.Infrastructure.Repositories
 {
-    public class PlayerRepository : IPlayerRepository
+    public class PlayerRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService) : IPlayerRepository
     {
-        private readonly DatabaseContext.DatabaseContext _context;
-        private readonly IMappingRetrievalService _mappingService;
-        public PlayerRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService)
-        {
-            _context = context;
-            _mappingService = mappingService;
-        }
+        private readonly DatabaseContext.DatabaseContext _context = context;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
 
         public async Task<PlayerEntity> PostPlayer(PlayerEntity player)
         {

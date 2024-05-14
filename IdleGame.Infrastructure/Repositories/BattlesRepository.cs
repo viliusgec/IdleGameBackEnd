@@ -6,15 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdleGame.Infrastructure.Repositories
 {
-    public class BattlesRepository : IBattlesRepository
+    public class BattlesRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService) : IBattlesRepository
     {
-        private readonly DatabaseContext.DatabaseContext _context;
-        private readonly IMappingRetrievalService _mappingService;
-        public BattlesRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService)
-        {
-            _context = context;
-            _mappingService = mappingService;
-        }
+        private readonly DatabaseContext.DatabaseContext _context = context;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
 
         public async Task<MonsterEntity> GetMonster(string name)
         {
@@ -30,7 +25,6 @@ namespace IdleGame.Infrastructure.Repositories
 
         public async Task<BattleEntity> GetBattle(int id)
         {
-            // check why .FindAsync(id) is not working
             var battle = await _context.Battles.AsNoTracking().FirstOrDefaultAsync(x => x.ID == id);
             return _mappingService.Map<BattleEntity>(battle);
         }
@@ -39,7 +33,6 @@ namespace IdleGame.Infrastructure.Repositories
         {
             // For some reason when using mapper it sets ID as 0 and EF Core won't populate it later. 
             var newBattle = new BattleModel { Player = battle.Player, BattleFinished = false, ItemGiven = battle.ItemGiven, Monster = battle.Monster, MonsterHP = battle.MonsterHP, PlayerHP = battle.PlayerHP };
-            //await _context.Battles.AddAsync(_mappingService.Map<BattleModel>(battle));
             await _context.Battles.AddAsync(newBattle);
             try
             {

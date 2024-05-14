@@ -7,17 +7,10 @@ namespace IdleGame.Api.Host.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController(IUserService userService, IMappingRetrievalService mappingService) : ControllerBase
     {
-        private readonly IUserService _userService;
-        private readonly IMappingRetrievalService _mappingService;
-
-        public UsersController(IUserService userService, IMappingRetrievalService mappingService)
-        {
-            _userService = userService;
-            _mappingService = mappingService;
-        }
-
+        private readonly IUserService _userService = userService;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
 
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetUser(string username)

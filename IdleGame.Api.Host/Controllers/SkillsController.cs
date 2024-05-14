@@ -1,6 +1,5 @@
 ﻿using IdleGame.Api.Contracts;
 using IdleGame.ApplicationServices.Services;
-using IdleGame.Domain.Entities;
 using IdleGame.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,16 +8,10 @@ namespace IdleGame.Api.Host.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SkillsController : ControllerBase
+    public class SkillsController(ISkillService skillService, IMappingRetrievalService mappingService) : ControllerBase
     {
-        private readonly ISkillService _skillService;
-        private readonly IMappingRetrievalService _mappingService;
-
-        public SkillsController(ISkillService skillService, IMappingRetrievalService mappingService)
-        {
-            _skillService = skillService;
-            _mappingService = mappingService;
-        }
+        private readonly ISkillService _skillService = skillService;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
 
         [HttpGet]
         [Authorize]
@@ -31,7 +24,7 @@ namespace IdleGame.Api.Host.Controllers
 
         [HttpGet]
         [Route("GetTrainingSkills")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<TrainingSkillDto>>> GetTrainingSkills(string skillType)
         {
             var result = await _skillService.GetTrainingSkillsBySkillName(skillType);
@@ -123,7 +116,7 @@ namespace IdleGame.Api.Host.Controllers
 
         [HttpGet]
         [Route("GetLeadersBySkill")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<LeadershipDto>>> GetLeadersBySkill(string skillName, int? leadersCount)
         {
             var result = await _skillService.GetLeadersBySkill(skillName, leadersCount);

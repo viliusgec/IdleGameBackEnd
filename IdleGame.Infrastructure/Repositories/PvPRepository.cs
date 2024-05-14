@@ -2,36 +2,15 @@
 using IdleGame.Domain.Repositories;
 using IdleGame.Domain.Services;
 using IdleGame.Infrastructure.Models;
-using IdleGame.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdleGame.Infrastructure.Repositories
 {
-    public class PvPRepository : IPvPRepository
+    public class PvPRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService) : IPvPRepository
     {
 
-        private readonly DatabaseContext.DatabaseContext _context;
-        private readonly IMappingRetrievalService _mappingService;
-        public PvPRepository(DatabaseContext.DatabaseContext context, IMappingRetrievalService mappingService)
-        {
-            _context = context;
-            _mappingService = mappingService;
-        }
-
-        /*        public Task<PlayerEntity> CreatePvP(PvPEntity user)
-                {
-                    throw new NotImplementedException();
-                }
-
-                public Task<PlayerEntity> GetPvP(int id)
-                {
-                    throw new NotImplementedException();
-                }
-
-                public PlayerEntity UpdatePvP(PvPEntity player)
-                {
-                    throw new NotImplementedException();
-                }*/
+        private readonly DatabaseContext.DatabaseContext _context = context;
+        private readonly IMappingRetrievalService _mappingService = mappingService;
 
         public async Task<PvPEntity> CreatePvP(PvPEntity pvp)
         {

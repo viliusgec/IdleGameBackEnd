@@ -3,13 +3,9 @@ using IdleGame.Domain.Repositories;
 
 namespace IdleGame.Domain.Services
 {
-    public class PlayerRetrievalService : IPlayerRetrievalService
+    public class PlayerRetrievalService(IPlayerRepository playerRepository) : IPlayerRetrievalService
     {
-        private readonly IPlayerRepository _playerRepository;
-        public PlayerRetrievalService(IPlayerRepository playerRepository)
-        {
-            _playerRepository = playerRepository;
-        }
+        private readonly IPlayerRepository _playerRepository = playerRepository;
 
         public Task<PlayerEntity> PostPlayer(string username)
         {

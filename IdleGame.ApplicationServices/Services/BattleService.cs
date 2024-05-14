@@ -3,20 +3,11 @@ using IdleGame.Domain.Services;
 
 namespace IdleGame.ApplicationServices.Services
 {
-    public class BattleService : IBattleService
+    public class BattleService(IItemRetrievalService itemService, IBattleRetrievalService battleService) : IBattleService
     {
-        private readonly IItemRetrievalService _itemService;
-        private readonly IBattleRetrievalService _battleService;
-        public BattleService(IItemRetrievalService itemService, IBattleRetrievalService battleService)
-        {
-            _itemService = itemService;
-            _battleService = battleService;
-        }
-/*        public Task<IEnumerable<ItemEntity>> GetItems()
-        {
-            return _itemService.GetItems();
-        }
-        */
+        private readonly IItemRetrievalService _itemService = itemService;
+        private readonly IBattleRetrievalService _battleService = battleService;
+
         public async Task<BattleEntity> ContinueBattle(string playerName, BattleEntity startedBattle)
         {
             var battle = await _battleService.GetBattle(startedBattle.ID);

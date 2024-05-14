@@ -3,13 +3,9 @@ using IdleGame.Domain.Repositories;
 
 namespace IdleGame.Domain.Services
 {
-    public class SkillRetrievalService : ISkillRetrievalService
+    public class SkillRetrievalService(ISkillRepository skillRepository) : ISkillRetrievalService
     {
-        private readonly ISkillRepository _skillRepository;
-        public SkillRetrievalService(ISkillRepository skillRepository)
-        {
-            _skillRepository = skillRepository;
-        }
+        private readonly ISkillRepository _skillRepository = skillRepository;
 
         public Task<IEnumerable<SkillEntity>> GetSkills(string username)
         {

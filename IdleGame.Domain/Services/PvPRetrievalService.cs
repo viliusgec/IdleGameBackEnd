@@ -3,13 +3,9 @@ using IdleGame.Domain.Repositories;
 
 namespace IdleGame.Domain.Services
 {
-    public class PvPRetrievalService : IPvPRetrievalService
+    public class PvPRetrievalService(IPvPRepository pvpRepository) : IPvPRetrievalService
     {
-        private readonly IPvPRepository _pvpRepository;
-        public PvPRetrievalService(IPvPRepository pvpRepository)
-        {
-            _pvpRepository = pvpRepository;
-        }
+        private readonly IPvPRepository _pvpRepository = pvpRepository;
 
         public Task<PvPEntity> CreatePvP(PvPEntity pvp)
         {
