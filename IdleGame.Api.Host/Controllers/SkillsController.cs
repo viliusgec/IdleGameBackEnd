@@ -24,7 +24,6 @@ namespace IdleGame.Api.Host.Controllers
 
         [HttpGet]
         [Route("GetTrainingSkills")]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<TrainingSkillDto>>> GetTrainingSkills(string skillType)
         {
             var result = await _skillService.GetTrainingSkillsBySkillName(skillType);
@@ -116,7 +115,6 @@ namespace IdleGame.Api.Host.Controllers
 
         [HttpGet]
         [Route("GetLeadersBySkill")]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<LeadershipDto>>> GetLeadersBySkill(string skillName, int? leadersCount)
         {
             var result = await _skillService.GetLeadersBySkill(skillName, leadersCount);

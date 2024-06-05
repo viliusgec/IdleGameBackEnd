@@ -5,7 +5,10 @@ namespace IdleGame.Domain.Services
     public interface IItemRetrievalService
     {
         public Task<IEnumerable<ItemEntity>> GetItems();
+        public Task<ItemEntity> GetItem(string name);
+        public ItemEntity UpdateItem(ItemEntity item);
         public Task<IEnumerable<ItemEntity>> GetShopItems();
+        public Task<ItemEntity> PostShopItem(ItemEntity item);
         public Task<IEnumerable<MarketItemEntity>> GetMarketItems();
         public Task<IEnumerable<MarketItemEntity>> GetPlayerMarketItems(string username);
         public Task<MarketItemEntity> PostMarketItem(MarketItemEntity item);

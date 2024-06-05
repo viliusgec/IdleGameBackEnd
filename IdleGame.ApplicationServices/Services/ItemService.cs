@@ -21,9 +21,21 @@ namespace IdleGame.ApplicationServices.Services
             return _itemService.GetItems();
         }
 
+        public async Task<ItemEntity> EditItemPrice(ItemDto item)
+        {
+            var itemData = await _itemService.GetItem(item.Name);
+            itemData.SellPrice = item.SellPrice;
+            return _itemService.UpdateItem(itemData);
+        }
+
         public Task<IEnumerable<ItemEntity>> GetShopItems()
         {
             return _itemService.GetShopItems();
+        }
+
+        public Task<ItemEntity> AddShopItem(ItemDto item)
+        {
+            return _itemService.PostShopItem(_mappingService.Map<ItemEntity>(item));
         }
 
         public Task<IEnumerable<PlayerItemEntity>> GetPlayerItems(string username)

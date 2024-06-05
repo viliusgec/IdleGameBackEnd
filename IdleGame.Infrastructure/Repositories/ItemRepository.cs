@@ -17,6 +17,26 @@ namespace IdleGame.Infrastructure.Repositories
             return _mappingService.Map<IEnumerable<ItemEntity>>(items);
         }
 
+        public async Task<ItemEntity> GetItem(string item)
+        {
+            var items = await _context.Items.AsNoTracking().FirstOrDefaultAsync(x => x.Name.Equals(item));
+            return _mappingService.Map<ItemEntity>(items);
+        }
+
+        public ItemEntity PutItem(ItemEntity item)
+        {
+            _context.Entry(_mappingService.Map<ItemModel>(item)).State = EntityState.Modified;
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return item;
+        }
+
         public async Task<IEnumerable<ItemEntity>> GetShopItems()
         {
             var items = await _context.ShopItems.AsNoTracking().Join(_context.Items,
@@ -24,6 +44,20 @@ namespace IdleGame.Infrastructure.Repositories
                 item => item.Name,
                 (userItem, item) => item).ToListAsync();
             return _mappingService.Map<IEnumerable<ItemEntity>>(items);
+        }
+
+        public async Task<ItemEntity> PostShopItem(ItemEntity item)
+        {
+            await _context.ShopItems.AddAsync(new ShopItemsModel { ItemName = item.Name});
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+            return item;
         }
 
         public async Task<IEnumerable<PlayerItemEntity>> GetPlayerItems(string username)

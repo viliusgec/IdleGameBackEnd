@@ -7,6 +7,8 @@ namespace IdleGame.ApplicationServices.Services
     {
         public Task<IEnumerable<ItemEntity>> GetItems();
         public Task<IEnumerable<ItemEntity>> GetShopItems();
+        public Task<ItemEntity> AddShopItem(ItemDto item);
+        public Task<ItemEntity> EditItemPrice(ItemDto item);
         public Task<IEnumerable<MarketItemEntity>> GetMarketItems();
         public Task<IEnumerable<MarketItemEntity>> GetPlayerMarketItems(string username);
         public Task<MarketItemEntity> SellMarketItems(MarketItemDto item);

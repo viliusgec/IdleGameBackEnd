@@ -47,5 +47,11 @@ namespace IdleGame.Infrastructure.Repositories
             }
             return player;
         }
+
+        public async Task<IEnumerable<PlayerEntity>> GetPlayers()
+        {
+            var player = await _context.Players.AsNoTrackingWithIdentityResolution().ToListAsync();
+            return _mappingService.Map<IEnumerable<PlayerEntity>>(player);
+        }
     }
 }

@@ -12,9 +12,24 @@ namespace IdleGame.Domain.Services
             return _itemRepository.GetItems();
         }
 
+        public Task<ItemEntity> GetItem(string name)
+        {
+            return _itemRepository.GetItem(name);
+        }
+
+        public ItemEntity UpdateItem(ItemEntity item)
+        {
+            return _itemRepository.PutItem(item);
+        }
+
         public Task<IEnumerable<ItemEntity>> GetShopItems()
         {
             return _itemRepository.GetShopItems();
+        }
+
+        public Task<ItemEntity> PostShopItem(ItemEntity item)
+        {
+            return _itemRepository.PostShopItem(item);
         }
 
         public Task<IEnumerable<PlayerItemEntity>> GetPlayerItems(string username)

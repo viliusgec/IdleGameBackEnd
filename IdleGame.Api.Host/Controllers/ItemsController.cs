@@ -35,6 +35,28 @@ namespace IdleGame.Api.Host.Controllers
             return Ok(_mappingService.Map<IEnumerable<ItemDto>>(result));
         }
 
+        [HttpPost]
+        [Route("AddShopItem")]
+        [Authorize]
+        public async Task<ActionResult<ItemDto>> AddShopItem(ItemDto item)
+        {
+            var result = await _itemService.AddShopItem(item);
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<ItemDto>(result));
+        }
+
+        [HttpPost]
+        [Route("EditItemPrice")]
+        [Authorize]
+        public async Task<ActionResult<ItemDto>> EditItemPrice(ItemDto item)
+        {
+            var result = await _itemService.EditItemPrice(item);
+            if (result == null)
+                return BadRequest();
+            return Ok(_mappingService.Map<ItemDto>(result));
+        }
+
         [HttpGet]
         [Route("GetPlayerItems")]
         [Authorize]

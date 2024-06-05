@@ -13,8 +13,10 @@ namespace IdleGame.Api.Host.Controllers
         private readonly IMappingRetrievalService _mappingService = mappingService;
 
         [HttpGet]
-        public async Task<ActionResult<UserDto>> GetUser(string username)
+        [Route("GetUser")]
+        public async Task<ActionResult<UserDto>> GetUser()
         {
+            string username = User.Claims.First(c => c.Type == "Username").Value;
             var result = await _userService.GetUser(username);
             return Ok(_mappingService.Map<UserDto>(result));
         }

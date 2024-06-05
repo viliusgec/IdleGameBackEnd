@@ -22,5 +22,10 @@ namespace IdleGame.Domain.Services
         {
             return _playerRepository.UpdatePlayer(player);
         }
+
+        public Task<IEnumerable<PlayerEntity>> GetPlayers()
+        {
+            return _playerRepository.GetPlayers();
+        }
     }
 }

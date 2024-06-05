@@ -11,5 +11,17 @@ namespace IdleGame.ApplicationServices.Services
         {
             return _playerService.GetPlayer(username);
         }
+
+        public Task<IEnumerable<PlayerEntity>> GetPlayers()
+        {
+            return _playerService.GetPlayers();
+        }
+
+        public async Task<PlayerEntity> UpdateMoney(PlayerEntity player)
+        {
+            var playerData = await _playerService.GetPlayer(player.Username);
+            playerData.Money = player.Money;
+            return _playerService.UpdatePlayer(playerData);
+        }
     }
 }

@@ -5,7 +5,10 @@ namespace IdleGame.Domain.Repositories
     public interface IItemRepository
     {
         public Task<IEnumerable<ItemEntity>> GetItems();
+        public Task<ItemEntity> GetItem(string name);
+        public ItemEntity PutItem(ItemEntity item);
         public Task<IEnumerable<ItemEntity>> GetShopItems();
+        public Task<ItemEntity> PostShopItem(ItemEntity item);
         public Task<IEnumerable<MarketItemEntity>> GetMarketItems();
         public Task<IEnumerable<MarketItemEntity>> GetPlayerMarketItems(string username);
         public Task<MarketItemEntity> PostMarketItem(MarketItemEntity item);
